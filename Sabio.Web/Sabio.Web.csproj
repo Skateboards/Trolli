@@ -259,7 +259,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JsBuilderController.cs" />
     <Compile Include="Controllers\SabioController.cs" />
-    <Compile Include="Controllers\Troll_UsersApiController.cs" />
+    <Compile Include="Controllers\Api\Troll_UsersApiController.cs" />
     <Compile Include="Extensions\DictionaryExt.cs" />
     <Compile Include="Extensions\EnumExt.cs" />
     <Compile Include="Extensions\HtmlHelperExt.cs" />
@@ -268,6 +268,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\DingService.cs" />
+    <Compile Include="Service\Troll_UsersService.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
