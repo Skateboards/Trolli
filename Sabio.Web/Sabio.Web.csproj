@@ -259,6 +259,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JsBuilderController.cs" />
     <Compile Include="Controllers\SabioController.cs" />
+    <Compile Include="Controllers\Troll_UsersApiController.cs" />
     <Compile Include="Extensions\DictionaryExt.cs" />
     <Compile Include="Extensions\EnumExt.cs" />
     <Compile Include="Extensions\HtmlHelperExt.cs" />
