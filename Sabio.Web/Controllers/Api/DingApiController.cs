@@ -25,6 +25,10 @@ namespace Trolli.Web.Controllers.Api
         [Route, HttpPost]
         public HttpResponseMessage Create(DigAddRequest model)
         {
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            }
             ItemResponse<int> response = new ItemResponse<int>();
 
             response.Item = _service.Insert(model);
