@@ -10,8 +10,8 @@ using Sabio.Models.Responses;
 
 namespace Trolli.Web.Controllers.Api
 {
-    [RoutePrefix("api/trolli")]
     [AllowAnonymous]
+    [RoutePrefix("api/trolli")]
     public class DingApiController : ApiController
     {
         private readonly DingService _service;
