@@ -12,6 +12,7 @@ namespace Trolli.Web.Controllers.Api
 {
     [AllowAnonymous]
     [RoutePrefix("api/trolli")]
+
     public class DingApiController : ApiController
     {
         private readonly DingService _service;
