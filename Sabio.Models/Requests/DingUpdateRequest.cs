@@ -13,7 +13,9 @@ namespace Trolli.Models.Requests
         public string Value { get; set; }
         public int RouteId { get; set; }
         public int StopId { get; set; }
-        public int StopDisplayName { get; set; }
+        public string StopDisplayName { get; set; }
         public string Agency { get; set; }
+        public double Lat { get; set; }
+        public double Long { get; set; }
     }
 }
