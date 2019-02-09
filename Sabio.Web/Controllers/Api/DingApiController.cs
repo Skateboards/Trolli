@@ -40,6 +40,20 @@ namespace Trolli.Web.Controllers.Api
             _service.Delete(id);
 
             return Request.CreateResponse(HttpStatusCode.OK, response);
+
+        }
+
+        [Route("{id:int}"), HttpPut]
+        public HttpResponseMessage Update(int id, DingUpdateRequest data)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            }
+            _service.Update(data);
+            SuccessResponse responseBody = new SuccessResponse();
+            return Request.CreateResponse(HttpStatusCode.Created, responseBody);
         }
     }
 }
