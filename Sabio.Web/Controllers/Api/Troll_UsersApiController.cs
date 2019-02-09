@@ -1,4 +1,6 @@
-﻿using Sabio.Web.Service;
+﻿using Sabio.Models.Requests;
+using Sabio.Models.Responses;
+using Sabio.Web.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,5 +21,31 @@ namespace Sabio.Web.Controllers
             _service = service;
         }
 
+        [Route, HttpPost]
+        public HttpResponseMessage Create(Troll_UserAddRequest model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            }
+            ItemResponse<int> response = new ItemResponse<int>();
+
+            response.Item = _service.Insert(model);
+
+            return Request.CreateResponse(HttpStatusCode.OK, response);
+        }
+
+        [Route("{id:int}"), HttpPut]
+        public HttpResponseMessage Update(int id, Troll_UserUpdateRequest data)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            }
+            _service.Update(data);
+            SuccessResponse responseBody = new SuccessResponse();
+            return Request.CreateResponse(HttpStatusCode.Created, responseBody);
+        }
     }
 }

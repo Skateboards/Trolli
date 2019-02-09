@@ -51,6 +51,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\DigAddRequest.cs" />
     <Compile Include="Requests\DingUpdateRequest.cs" />
+    <Compile Include="Requests\Troll_UserAddRequest.cs" />
+    <Compile Include="Requests\Troll_UserUpdateRequest.cs" />
     <Compile Include="Responses\BaseResponse.cs" />
     <Compile Include="Responses\ErrorResponse.cs" />
     <Compile Include="Responses\ItemResponse.cs" />

@@ -25,8 +25,8 @@ namespace Sabio.Web.Service
             _dataProvider.ExecuteNonQuery(procName
                 , inputParamMapper: delegate (SqlParameterCollection sqlParams)
                 {
-                    sqlParams.AddWithValue("@DingCategory", model.Password);
-                    sqlParams.AddWithValue("@Value", model.UserName);
+                    sqlParams.AddWithValue("@Password", model.Password);
+                    sqlParams.AddWithValue("@UserName", model.UserName);
 
                     SqlParameter idParameter = new SqlParameter("@Id", System.Data.SqlDbType.Int);
                     idParameter.Direction = System.Data.ParameterDirection.Output;
@@ -40,5 +40,16 @@ namespace Sabio.Web.Service
             return id;
         }
 
+        public void Update(Troll_UserUpdateRequest data)
+        {
+            string storeProc = "[dbo].[Trolli_User_Update]";
+
+            _dataProvider.ExecuteNonQuery(storeProc, delegate (SqlParameterCollection sqlParams)
+            {
+                sqlParams.AddWithValue("@Id", data.Id);
+                sqlParams.AddWithValue("@UserName", data.UserName);
+                sqlParams.AddWithValue("@Password", data.Password);
+            });
+        }
     }
 }
