@@ -22,5 +22,9 @@ namespace Trolli.Models.Requests
 
         public string Agency { get; set; }
 
+        public double Lat { get; set; }
+
+        public double Long { get; set; }
+
     }
 }
