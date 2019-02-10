@@ -64,15 +64,18 @@ namespace Trolli.Services.Dings
                 });
         }
 
-        public Sabio.Models.Paged<Ding> Get(int pageIndex, int pageSize)
+        public Sabio.Models.Paged<Ding> Get(string date, double lat, double lon, int pageIndex, int pageSize)
         {
             int totalCount = 0;
             Sabio.Models.Paged<Ding> responseBody = null;
             List<Ding> list = null;
-            string procName = "[dbo].[Dings_SelectByPagination]";
+            string procName = "[dbo].[Dings_SelectAllV2]";
             _dataProvider.ExecuteCmd(procName
                 , inputParamMapper: delegate (SqlParameterCollection paramCollection)
                 {
+                    paramCollection.AddWithValue("@Date", date);
+                    paramCollection.AddWithValue("@Lat", lat);
+                    paramCollection.AddWithValue("@Long", lon);
                     paramCollection.AddWithValue("@pageIndex", pageIndex);
                     paramCollection.AddWithValue("@pageSize", pageSize);
 
@@ -80,6 +83,60 @@ namespace Trolli.Services.Dings
                   , singleRecordMapper: delegate (IDataReader reader, short set)
                   {
                       Sabio.Models.Domain.Ding dings = new Ding();
+
+
+                      int startingIndex = 0;
+                      dings.DingId = reader.GetSafeInt32(startingIndex++);
+                      dings.DingCategory = reader.GetSafeString(startingIndex++);
+                      dings.Value = reader.GetSafeString(startingIndex++);
+                      dings.DateAdded = reader.GetSafeDateTime(startingIndex++);
+                      dings.CreatedBy = reader.GetSafeInt32(startingIndex++);
+                      dings.RouteId = reader.GetSafeInt32(startingIndex++);
+                      dings.StopId = reader.GetSafeInt32(startingIndex++);
+                      dings.StopDisplayName = reader.GetSafeString(startingIndex++);
+                      dings.Agency = reader.GetSafeString(startingIndex++);
+                      dings.Lat = reader.GetSafeDouble(startingIndex++);
+                      dings.Long = reader.GetSafeDouble(startingIndex++);
+                      startingIndex++;
+
+                      if (totalCount == 0)
+                      {
+                          totalCount = reader.GetSafeInt32(startingIndex++);
+                      }
+
+                      if (list == null)
+                      {
+                          list = new List<Ding>();
+                      }
+                      list.Add(dings);
+
+
+                  }
+                   );
+            if (list != null)
+            {
+                responseBody = new Sabio.Models.Paged<Ding>(list, pageIndex, pageSize, totalCount);
+            }
+
+            return responseBody;
+        }
+
+
+        public List<Ding> GetMine(int userId, int pageIndex, int pageSize)
+        {
+            int totalCount = 0;
+            List<Ding> list = null;
+            string procName = "[dbo].[Dings_SelectMineByPage]";
+            _dataProvider.ExecuteCmd(procName
+                , inputParamMapper: delegate (SqlParameterCollection paramCollection)
+                {
+                    paramCollection.AddWithValue("@UserId", userId);
+                    paramCollection.AddWithValue("@pageIndex", pageIndex);
+                    paramCollection.AddWithValue("@pageSize", pageSize);
+                }
+                  , singleRecordMapper: delegate (IDataReader reader, short set)
+                  {
+                      Ding dings = new Ding();
 
 
                       int startingIndex = 0;
@@ -105,16 +162,10 @@ namespace Trolli.Services.Dings
                           list = new List<Ding>();
                       }
                       list.Add(dings);
-
-
                   }
                    );
-            if (list != null)
-            {
-                responseBody = new Sabio.Models.Paged<Ding>(list, pageIndex, pageSize, totalCount);
-            }
 
-            return responseBody;
+            return list;
         }
 
 
