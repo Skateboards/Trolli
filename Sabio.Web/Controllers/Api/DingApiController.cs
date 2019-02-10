@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Sabio.Models.Responses;
+using Sabio.Models;
 using Sabio.Models.Domain;
 using Sabio.Models.Requests;
 
@@ -61,6 +62,20 @@ namespace Trolli.Web.Controllers.Api
             _service.Update(data);
             SuccessResponse responseBody = new SuccessResponse();
             return Request.CreateResponse(HttpStatusCode.Created, responseBody);
+        }
+
+        [Route("{pageIndex:int}/{pageSize:int}"), HttpGet]
+        public HttpResponseMessage Get(int pageIndex, int pageSize)
+        {
+
+            ItemResponse<Paged<Ding>> response = new ItemResponse<Paged<Ding>>();
+            response.Item = _service.Get(pageIndex, pageSize);
+            if (response.Item == null)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, response);
         }
 
 
