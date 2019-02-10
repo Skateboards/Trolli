@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sabio.Data.Providers;
+using Sabio.Data;
+using Sabio.Models.Domain;
 
 namespace Trolli.Services.Dings
 {
@@ -56,6 +58,61 @@ namespace Trolli.Services.Dings
                     sqlParameter.AddWithValue("@DingId", dingId);
                 });
         }
+
+        public Sabio.Models.Paged<Ding> Get(int pageIndex, int pageSize)
+        {
+            int totalCount = 0;
+            Sabio.Models.Paged<Ding> responseBody = null;
+            List<Ding> list = null;
+            string procName = "[dbo].[Dings_SelectByPagination]";
+            _dataProvider.ExecuteCmd(procName
+                , inputParamMapper: delegate (SqlParameterCollection paramCollection)
+                {
+                    paramCollection.AddWithValue("@pageIndex", pageIndex);
+                    paramCollection.AddWithValue("@pageSize", pageSize);
+
+                }
+                  , singleRecordMapper: delegate (IDataReader reader, short set)
+                  {
+                      Sabio.Models.Domain.Ding dings = new Ding();
+
+
+                      int startingIndex = 0;
+                      dings.DingId = reader.GetSafeInt32(startingIndex++);
+                      dings.DingCategory = reader.GetSafeString(startingIndex++);
+                      dings.Value = reader.GetSafeString(startingIndex++);
+                      dings.DateAdded = reader.GetSafeDateTime(startingIndex++);
+                      dings.CreatedBy = reader.GetSafeInt32(startingIndex++);
+                      dings.RouteId = reader.GetSafeInt32(startingIndex++);
+                      dings.StopId = reader.GetSafeInt32(startingIndex++);
+                      dings.StopDisplayName = reader.GetSafeString(startingIndex++);
+                      dings.Agency = reader.GetSafeString(startingIndex++);
+                      dings.Lat = reader.GetSafeDouble(startingIndex++);
+                      dings.Long = reader.GetSafeDouble(startingIndex++);
+
+                      if (totalCount == 0)
+                      {
+                          totalCount = reader.GetSafeInt32(startingIndex++);
+                      }
+
+                      if (list == null)
+                      {
+                          list = new List<Ding>();
+                      }
+                      list.Add(dings);
+
+
+                  }
+                   );
+            if (list != null)
+            {
+                responseBody = new Sabio.Models.Paged<Ding>(list, pageIndex, pageSize, totalCount);
+            }
+
+            return responseBody;
+        }
+
+
         public void Update(DingUpdateRequest data)
         {
             string storeProc = "[dbo].[Dings_Update]";
@@ -75,6 +132,10 @@ namespace Trolli.Services.Dings
             });
         }
 
+
+
     }
+
+
 
 }
