@@ -8,6 +8,7 @@ import RouteMap from "./components/RouteMap";
 import Login from "./components/AuthFlow/Login";
 import Register from "./components/AuthFlow/Register";
 import PageLoader from "./components/PageLoader";
+import Logout from "./components/AuthFlow/Logout";
 
 import * as userService from "./Services/userService";
 
@@ -177,7 +178,7 @@ class App extends Component {
             <Route
               path="/logout"
               exact
-              render={props => <Login {...props} />}
+              render={props => <Logout {...props} />}
             />
             <Route
               path="/register"
