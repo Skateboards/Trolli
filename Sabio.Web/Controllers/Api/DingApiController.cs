@@ -81,7 +81,7 @@ namespace Trolli.Web.Controllers.Api
         [Route("mydings"), HttpGet]
         public HttpResponseMessage GetMine(int pageIndex, int pageSize)
         {
-            ItemResponse<List<Ding>> response = new ItemResponse<List<Ding>>();
+            ItemResponse<Paged<Ding>> response = new ItemResponse<Paged<Ding>>();
             IUserAuthData user = _auth.GetCurrentUser();
             int userId = user.Id;
             response.Item = _service.GetMine(userId, pageIndex, pageSize);

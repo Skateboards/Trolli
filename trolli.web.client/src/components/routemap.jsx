@@ -1,6 +1,7 @@
 import React from "react";
 import * as mapServices from "../Services/mapServices";
 import MapWithADirectionsRenderer from "./MapRender";
+import DingDisplaySmall from "../components/Dings/DingDisplaySmall";
 
 class RouteMap extends React.Component {
   constructor(props) {
@@ -8,10 +9,11 @@ class RouteMap extends React.Component {
     this.state = {
       origin: { lat: 0, lng: 0 },
       destination: "",
+      inputDestination: "",
       renderMap: false
     };
   }
-  //
+
   componentDidMount() {
     navigator.geolocation.getCurrentPosition(response => {
       const origin = {
@@ -30,7 +32,7 @@ class RouteMap extends React.Component {
 
   encodeAddress = () => {
     let mapImageURL = encodeURIComponent(
-      this.state.destination.replace(/[&\\#,+()$~%.'":*?<>{}]/g, "")
+      this.state.inputDestination.replace(/[&\\#,+()$~%.'":*?<>{}]/g, "")
     );
     mapServices.geoLocation(
       mapImageURL,
@@ -59,9 +61,7 @@ class RouteMap extends React.Component {
 
   getRouteSuccess = response => {
     let route = JSON.parse(response.data.item);
-    console.log(route);
     const routeIds = [];
-    debugger;
     for (let i = 0; i < route.routes[0].legs[0].steps.length; i++) {
       const step = route.routes[0].legs[0].steps[i];
       if ("travel_mode" in step && step.travel_mode === "TRANSIT") {
@@ -74,13 +74,14 @@ class RouteMap extends React.Component {
     console.log(routeIds);
     let payload = { Date: new Date(), routeId: routeIds };
     mapServices.listOfDings(payload, this.dingSuccess, this.dingError);
-    this.setState({
-      renderMap: true
-    });
   };
 
   dingSuccess = res => {
-    console.log(res);
+    console.log(res.data.items);
+    this.setState({
+      dings: res.data.items,
+      renderMap: true
+    });
   };
 
   dingError = err => {
@@ -95,6 +96,10 @@ class RouteMap extends React.Component {
     console.log(error);
   };
 
+  mapMyDings = (ding, index) => {
+    return <DingDisplaySmall ding={ding} key={index} id={ding.dingId} />;
+  };
+
   render() {
     return (
       <div className="container text-center p-3 mt-3">
@@ -102,9 +107,9 @@ class RouteMap extends React.Component {
           <div>
             <input
               type="text"
-              value={this.state.destination}
+              value={this.state.inputDestination}
               onChange={event => this.handleChange(event)}
-              name="destination"
+              name="inputDestination"
               className="form-control"
             />
           </div>
@@ -124,6 +129,8 @@ class RouteMap extends React.Component {
           </div>
         </form>
         {this.state.renderMap && <MapWithADirectionsRenderer {...this.state} />}
+
+        {this.state.renderMap && this.state.dings.map(this.mapMyDings)}
       </div>
     );
   }
