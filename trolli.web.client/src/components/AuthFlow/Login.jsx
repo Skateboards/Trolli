@@ -1,7 +1,15 @@
 import React, { PureComponent } from "react";
 import { withRouter } from "react-router";
 import { Formik } from "formik";
-import { Form, FormGroup, Input, Container, Card } from "reactstrap";
+import {
+  Form,
+  FormGroup,
+  Input,
+  Container,
+  Card,
+  Navbar,
+  NavbarBrand
+} from "reactstrap";
 import { Link } from "react-router-dom";
 
 import * as userService from "../../Services/userService";
@@ -54,6 +62,12 @@ class Login extends PureComponent {
   render() {
     return (
       <Container fluid>
+        <Navbar className="bg-light-blue" color="dark" dark expand="md">
+          <NavbarBrand href="/">
+            <i className="fas fa-bus mr-2" />
+            Trolli
+          </NavbarBrand>
+        </Navbar>
         <div className="block-center m-4 wd-xl">
           <Card className="py-5 px-4">
             <p className="text-center">LOG IN TO CONTINUE.</p>

@@ -4,8 +4,10 @@ import React from "react";
 // https://fontawesome.com/how-to-use/on-the-web/styling/animating-icons
 const PageLoader = () => {
   return (
-    <div className="page-loader">
+    <div className="page-loader d-flex">
       <img
+        className="mx-auto"
+        style={{ height: "60px", width: "60px" }}
         src="https://res.cloudinary.com/merrickcloud/image/upload/v1549773351/Rolling-1.3s-83px_glqaie.gif"
         alt="amazing-awesome-dog"
       />
