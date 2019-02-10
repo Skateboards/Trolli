@@ -8,6 +8,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Sabio.Models;
+using Sabio.Services;
 
 namespace Sabio.Web.Controllers
 {
@@ -16,9 +18,10 @@ namespace Sabio.Web.Controllers
     public class Troll_UsersApiController : ApiController
     {
         private readonly Troll_UsersService _service;
-
-        public Troll_UsersApiController(Troll_UsersService service)
+        private IAuthenticationService _auth;
+        public Troll_UsersApiController(Troll_UsersService service, IAuthenticationService auth)
         {
+            _auth = auth;
             _service = service;
         }
 
@@ -76,5 +79,39 @@ namespace Sabio.Web.Controllers
             }
         }
 
+        [Route("login"), HttpPost]
+        [AllowAnonymous]
+        public HttpResponseMessage LogIn(Troll_UserLoginRequest model)
+        {
+            HttpStatusCode statusCode = HttpStatusCode.OK;
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            }
+
+            ItemResponse<bool> response = new ItemResponse<bool>();
+            response.Item = _service.LogIn(model.UserName, model.Password);
+            if (response.Item)
+            {
+                return Request.CreateResponse(statusCode, response);
+            }
+            else
+            {
+                response.IsSuccessful = false;
+                statusCode = HttpStatusCode.BadRequest;
+                return Request.CreateResponse(statusCode, response);
+            }
+
+        }
+
+        [Route("current"), HttpGet]
+        public HttpResponseMessage Current()
+        {
+            ItemResponse<IUserAuthData> response = new ItemResponse<IUserAuthData>();
+
+            response.Item = _auth.GetCurrentUser();
+
+            return Request.CreateResponse(HttpStatusCode.OK, response);
+        }
     }
 }
