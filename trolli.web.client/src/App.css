@@ -1,6 +1,10 @@
+body,
+html {
+  background-color: #99bbff;
+}
+
 .App {
   text-align: center;
-  background-color: #99bbff !important;
 }
 
 .App-logo {
@@ -36,6 +40,15 @@
 .bg-light-blue {
   background-color: #99bbff !important;
   color: white;
+}
+
+.page-loader {
+  position: absolute;
+  width: 300px;
+  height: 200px;
+  top: 50%;
+  left: 50%;
+  margin: -100px 0 0 -150px;
 }
 
 @keyframes App-logo-spin {

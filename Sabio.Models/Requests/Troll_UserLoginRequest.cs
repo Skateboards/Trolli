@@ -5,15 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace Sabio.Models.Requests
 {
-    public class Troll_UserAddRequest
+    public class Troll_UserLoginRequest
     {
         [Required]
-        public string Password { get; set; }
-
-        [Required]
         public string UserName { get; set; }
+        [Required]
+        public string Password { get; set; }
     }
 }

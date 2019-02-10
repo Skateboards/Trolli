@@ -8,15 +8,20 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using Sabio.Services;
+using Sabio.Models;
 
 namespace Sabio.Web.Service
 {
+
     public class Troll_UsersService
     {
+        private IAuthenticationService _authenticationService;
         private readonly IDataProvider _dataProvider;
 
-        public Troll_UsersService(IDataProvider dataProvider)
+        public Troll_UsersService(IDataProvider dataProvider, IAuthenticationService authSerice)
         {
+            _authenticationService = authSerice;
             _dataProvider = dataProvider;
 
         }
@@ -48,6 +53,7 @@ namespace Sabio.Web.Service
             return trolliData;
 
         }
+
         public int Insert(Troll_UserAddRequest model)
         {
             int id = 0;
@@ -72,6 +78,7 @@ namespace Sabio.Web.Service
             return id;
         }
 
+
         public void Update(Troll_UserUpdateRequest data)
         {
             string storeProc = "[dbo].[Trolli_User_Update]";
@@ -93,6 +100,59 @@ namespace Sabio.Web.Service
                     sqlParams.AddWithValue("@id", Id);
                 });
 
+        }
+
+        public bool LogIn(string userName, string password)
+        {
+            bool isSuccessful = false;
+
+            IUserAuthData response = SelectByUserName(userName, password);
+
+            if (response != null)
+            {
+                _authenticationService.LogIn(response);
+                isSuccessful = true;
+            }
+
+
+            return isSuccessful;
+
+        }
+
+        public void LogOut()
+        {
+            _authenticationService.LogOut();
+
+        }
+
+        private UserBase SelectByUserName(string userName, string password)
+        {
+            string PasswordRead = "";
+            UserBase authUser = null;
+            TrolliUsers trolliData = null;
+            string procName = "[dbo].[Troll_Users_SelectByUserName]";
+            _dataProvider.ExecuteCmd(procName
+            , inputParamMapper: delegate (SqlParameterCollection paramCollection)
+            {
+                paramCollection.AddWithValue("@UserName", userName);
+
+            }
+           , singleRecordMapper: delegate (IDataReader reader, short set)
+           {
+               trolliData = new TrolliUsers();
+               int startingIndex = 0;
+               authUser = new UserBase
+               {
+                   Id = reader.GetSafeInt32(startingIndex++),
+                   Name = reader.GetSafeString(startingIndex++)
+               };
+               PasswordRead = reader.GetSafeString(startingIndex++);
+           });
+            if (PasswordRead == password)
+            {
+                return authUser;
+            }
+            return null;
         }
 
     }

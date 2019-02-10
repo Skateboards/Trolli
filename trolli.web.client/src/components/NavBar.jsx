@@ -22,10 +22,15 @@ class NavBar extends React.Component {
     return (
       <div>
         <Navbar className="bg-light-blue" color="dark" dark expand="md">
-          <NavbarBrand href="/">Trolli</NavbarBrand>
-          <Link to="/logout" className="btn bg-light-blue border-0">
-            Logout
-          </Link>
+          <NavbarBrand href="/">
+            <i className="fas fa-bus mr-2" />
+            Trolli
+          </NavbarBrand>
+          {!this.props.userAuth && (
+            <Link to="/logout" className="btn bg-light-blue border-0">
+              Logout
+            </Link>
+          )}
         </Navbar>
       </div>
     );
