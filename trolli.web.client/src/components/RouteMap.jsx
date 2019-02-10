@@ -14,7 +14,7 @@ class RouteMap extends React.Component {
       destination: ""
     };
   }
-
+  // let j = [];
   componentDidMount() {
     navigator.geolocation.getCurrentPosition(response => {
       const location = {
