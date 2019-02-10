@@ -1,28 +1,25 @@
 import React from "react";
-import {
-  withScriptjs,
-  withGoogleMap,
-  GoogleMap,
-  Marker
-} from "react-google-maps";
 import * as mapServices from "../Services/mapServices";
+import MapWithADirectionsRenderer from "./MapRender";
 
 class RouteMap extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      destination: ""
+      origin: { lat: 0, lng: 0 },
+      destination: "",
+      renderMap: false
     };
   }
 
   componentDidMount() {
     navigator.geolocation.getCurrentPosition(response => {
-      const location = {
+      const origin = {
         lat: response.coords.latitude,
         lng: response.coords.longitude
       };
       this.setState({
-        origin: location
+        origin: origin
       });
     });
   }
@@ -43,44 +40,48 @@ class RouteMap extends React.Component {
   };
 
   geoLocationSuccess = response => {
-    console.log(response);
+    let dest = JSON.parse(response.data.item);
+    console.log(dest);
+    let latlong = dest.results[0].geometry.location;
+    this.setState(
+      {
+        destination: latlong,
+        renderMap: true
+      },
+      console.log(this.state)
+    );
   };
 
   geoLocationFail = error => {
     console.log(error);
   };
 
-  onGetRouteSuccess = response => {
-    console.log(response);
-  };
-
-  onGetRouteFail = error => {
-    console.log(error);
-  };
-
   render() {
     return (
-      <form>
-        <div>
-          <label>Destination:</label>
-          <input
-            type="text"
-            value={this.state.destination}
-            onChange={event => this.handleChange(event)}
-            name="destination"
-            className="form-control"
-          />
-        </div>
-        <p>
-          <button
-            className={"btn btn-success btn-block"}
-            type="button"
-            onClick={e => this.encodeAddress(e)}
-          >
-            Get my Route
-          </button>
-        </p>
-      </form>
+      <div>
+        <form>
+          <div>
+            <label>Destination:</label>
+            <input
+              type="text"
+              value={this.state.destination}
+              onChange={event => this.handleChange(event)}
+              name="destination"
+              className="form-control"
+            />
+          </div>
+          <p>
+            <button
+              className={"btn btn-success btn-block"}
+              type="button"
+              onClick={e => this.encodeAddress(e)}
+            >
+              Get my Route
+            </button>
+          </p>
+        </form>
+        {this.state.renderMap && <MapWithADirectionsRenderer {...this.state} />}
+      </div>
     );
   }
 }
