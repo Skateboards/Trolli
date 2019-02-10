@@ -2,7 +2,7 @@ import * as userService from "../../Services/userService";
 
 const Logout = props => {
   userService.logout().then(() =>
-    props.history.push("/goodbye", {
+    props.history.push("/login", {
       action: "USERLOGOUT"
     })
   );

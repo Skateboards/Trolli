@@ -38,4 +38,17 @@ const logout = () => {
     .catch(global.onGlobalError);
 };
 
-export { login, logout, getCurrent };
+const create = payload => {
+  const config = {
+    method: "POST",
+    url: "/api/users",
+    data: payload,
+    headers: { "Content-Type": "application/json" }
+  };
+
+  return axios(config)
+    .then(global.onGlobalSuccess)
+    .catch(global.onGlobalError);
+};
+
+export { login, logout, getCurrent, create };

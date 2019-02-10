@@ -1,7 +1,15 @@
 import React, { PureComponent } from "react";
 import { withRouter } from "react-router";
 import { Formik } from "formik";
-import { Form, FormGroup, Input, Container, Card } from "reactstrap";
+import {
+  Form,
+  FormGroup,
+  Input,
+  Container,
+  Card,
+  Navbar,
+  NavbarBrand
+} from "reactstrap";
 
 import * as userService from "../../Services/userService";
 import * as schemas from "../../models/userSchemas";
@@ -13,8 +21,6 @@ class Login extends PureComponent {
     this.validation = schemas.getRegisterSchema;
     this.state = {};
     this.state.userData = this.validation.initialValues;
-
-    // this.onLoginSuccess = this.onLoginSuccess.bind(this);
   }
 
   componentDidMount() {
@@ -23,8 +29,9 @@ class Login extends PureComponent {
     }
   }
 
-  onLoginSuccess = sub => {
+  onLoginSuccess = (resp, sub) => {
     sub(false);
+    console.log(resp);
     if (this.props.location.search) {
       let path = this.props.location.search.replace("?return=", "");
       this.props.history.push(path, {
@@ -42,16 +49,35 @@ class Login extends PureComponent {
     console.log(err);
   };
 
-  handleSubmit = (values, { setSubmitting }) => {
+  onCreateUserSuccess = (values, setSubmitting) => {
+    setSubmitting(false);
     userService
       .login(values)
-      .then(() => this.onLoginSuccess(setSubmitting))
+      .then(resp => this.onLoginSuccess(resp, setSubmitting))
       .catch(err => this.onLoginFail(err, setSubmitting));
+  };
+
+  onCreateUserFail = (err, sub) => {
+    sub(false);
+    console.log(err);
+  };
+
+  handleSubmit = (values, { setSubmitting }) => {
+    userService
+      .create(values)
+      .then(() => this.onCreateUserSuccess(values, setSubmitting))
+      .catch(err => this.onCreateUserFail(err, setSubmitting));
   };
 
   render() {
     return (
       <Container fluid>
+        <Navbar className="bg-light-blue" color="dark" dark expand="md">
+          <NavbarBrand href="/">
+            <i className="fas fa-bus mr-2" />
+            Trolli
+          </NavbarBrand>
+        </Navbar>
         <div className="block-center m-4 wd-xl">
           <Card className="py-5 px-4">
             <p className="text-center">CREATE AN ACCOUNT</p>

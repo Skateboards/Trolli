@@ -27,12 +27,13 @@ const getRoute = (originLatLong, destinationLatLong) => {
 };
 
 const geoLocation = (mapImageURL, onSuccess, onError) => {
+  debugger;
   const config = {
-    method: "PUT",
+    method: "POST",
     payload: { url: geoLocationAPI + mapImageURL + "&key=" + key },
-    url: "http://localhost:3024/api/routes",
-    withCredentials: true,
-    crossDomain: true,
+    url: "https://localhost:3024/api/routes",
+    // withCredentials: true,
+    // crossDomain: true,
     headers: {
       "Content-Type": "application/json"
     }

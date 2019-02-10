@@ -22,14 +22,8 @@ class DingCreate extends React.Component {
   }
   componentDidMount() {}
   handleSubmitDing = (values, obj) => {
-    debugger;
     var data;
     navigator.geolocation.getCurrentPosition(response => {
-      const location = {
-        lat: response.coords.latitude,
-        long: response.coords.longitude,
-        date: new Date()
-      };
       data = {
         DingCategory: values.category,
         Value: values.message,
@@ -44,7 +38,7 @@ class DingCreate extends React.Component {
       dingService
         .create(data)
         .then(() => this.props.history.push("/"))
-        .catch(console.log("error"));
+        .catch(() => console.log("error"));
     });
   };
   hand = a => {
@@ -148,11 +142,11 @@ class DingCreate extends React.Component {
                               style={{ display: "block" }}
                             >
                               <option value="" label="Select Type" />
-                              {this.state.selectedAgency == "lametro-rail"
+                              {this.state.selectedAgency === "lametro-rail"
                                 ? constants.routse.lametroRail.map(
                                     this.renderLametroRail
                                   )
-                                : this.state.selectedAgency == "lametro"
+                                : this.state.selectedAgency === "lametro"
                                 ? constants.routse.lametro.map(
                                     this.renderLametroRail
                                   )

@@ -26,7 +26,7 @@ class NavBar extends React.Component {
             <i className="fas fa-bus mr-2" />
             Trolli
           </NavbarBrand>
-          {this.props.userAuth || (
+          {!this.props.userAuth && (
             <Link to="/logout" className="btn bg-light-blue border-0">
               Logout
             </Link>
