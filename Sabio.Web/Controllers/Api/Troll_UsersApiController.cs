@@ -48,5 +48,32 @@ namespace Sabio.Web.Controllers
             SuccessResponse responseBody = new SuccessResponse();
             return Request.CreateResponse(HttpStatusCode.Created, responseBody);
         }
+
+        [Route("{id:int}"), HttpDelete]
+        public HttpResponseMessage Delete(int id)
+        {
+            ItemResponse<bool> response = new ItemResponse<bool>();
+            response.Item = true;
+
+            _service.Delete(id);
+
+            return Request.CreateResponse(HttpStatusCode.OK, response);
+        }
+
+        [Route("{id:int}"), HttpGet]
+        public HttpResponseMessage Get(int id)
+        {
+            {
+                HttpStatusCode code = HttpStatusCode.OK;
+                ItemResponse<TrolliUsers> responseBody = new ItemResponse<TrolliUsers>();
+                responseBody.Item = _service.GetById(id);
+                if (responseBody.Item == null)
+                {
+                    code = HttpStatusCode.NotFound;
+
+                }
+                return Request.CreateResponse(code, responseBody);
+            }
+        }
     }
 }
