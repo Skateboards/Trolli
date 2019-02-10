@@ -140,7 +140,7 @@ namespace Trolli.Services.Dings
         public List<Ding> Post(DingSelectRoute model)
         {
 
-            string storedProc = "dbo.Dings_SelectList";
+            string storedProc = "[dbo].[Dings_SelectList]";
             List<Ding> dingList = new List<Ding>();
             _dataProvider.ExecuteCmd(storedProc
                 , inputParamMapper: delegate (SqlParameterCollection sqlParams)
@@ -167,8 +167,9 @@ namespace Trolli.Services.Dings
                    ding.DingId = reader.GetSafeInt32(startingIndex++);
                    ding.DingCategory = reader.GetSafeString(startingIndex++);
                    ding.Value = reader.GetSafeString(startingIndex++);
+                   ding.DateAdded = reader.GetSafeDateTime(startingIndex++);
                    ding.CreatedBy = reader.GetSafeInt32(startingIndex++);
-                   ding.RouteId = reader.GetSafeInt32(startingIndex);
+                   ding.RouteId = reader.GetSafeInt32(startingIndex++);
                    ding.StopId = reader.GetSafeInt32(startingIndex++);
                    ding.StopDisplayName = reader.GetSafeString(startingIndex++);
                    ding.Agency = reader.GetSafeString(startingIndex++);
