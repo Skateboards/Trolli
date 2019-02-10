@@ -5,10 +5,11 @@ import "./App.css";
 
 import PageLoader from "./components/PageLoader";
 import * as userService from "./Services/userService";
+import ContentWrapper from "./components/ContentWrapper";
 
 const NavBar = lazy(() => import("./components/NavBar"));
 const HomePage = lazy(() => import("./components/HomePage"));
-const RouteMap = lazy(() => import("./components/RouteMap"));
+const RouteMap = lazy(() => import("./components/routemap"));
 const Login = lazy(() => import("./components/AuthFlow/Login"));
 const Register = lazy(() => import("./components/AuthFlow/Register"));
 const Logout = lazy(() => import("./components/AuthFlow/Logout"));
@@ -123,23 +124,28 @@ class App extends Component {
       content = (
         <Suspense fallback={<PageLoader />}>
           <Switch>
-            <Route
-              path="/login"
-              exact
-              render={props => (
-                <Login {...props} userAuthorized={this.state.userAuthorized} />
-              )}
-            />
-            <Route
-              path="/register"
-              exact
-              render={props => (
-                <Register
-                  {...props}
-                  userAuthorized={this.state.userAuthorized}
-                />
-              )}
-            />
+            <ContentWrapper>
+              <Route
+                path="/login"
+                exact
+                render={props => (
+                  <Login
+                    {...props}
+                    userAuthorized={this.state.userAuthorized}
+                  />
+                )}
+              />
+              <Route
+                path="/register"
+                exact
+                render={props => (
+                  <Register
+                    {...props}
+                    userAuthorized={this.state.userAuthorized}
+                  />
+                )}
+              />
+            </ContentWrapper>
           </Switch>
         </Suspense>
       );
@@ -157,59 +163,64 @@ class App extends Component {
           <Swipe
             onSwipeMove={position => this.onSwipeMove(position, this.props)}
           >
-            <Route
-              path="/"
-              render={props => (
-                <NavBar {...props} userAuthorized={this.state.userAuthorized} />
-              )}
-            />
-            <Switch>
+            <ContentWrapper>
               <Route
                 path="/"
-                exact
                 render={props => (
-                  <HomePage
+                  <NavBar
                     {...props}
                     userAuthorized={this.state.userAuthorized}
                   />
                 )}
               />
-              <Route
-                path="/login"
-                exact
-                render={props => (
-                  <Login
-                    {...props}
-                    userAuthorized={this.state.userAuthorized}
-                  />
-                )}
-              />
-              <Route
-                path="/logout"
-                exact
-                render={props => <Logout {...props} />}
-              />
-              <Route
-                path="/register"
-                exact
-                render={props => (
-                  <Register
-                    {...props}
-                    userAuthorized={this.state.userAuthorized}
-                  />
-                )}
-              />
-              <Route
-                path="/myroute"
-                exact
-                render={props => (
-                  <RouteMap
-                    {...props}
-                    userAuthorized={this.state.userAuthorized}
-                  />
-                )}
-              />
-            </Switch>
+              <Switch>
+                <Route
+                  path="/"
+                  exact
+                  render={props => (
+                    <HomePage
+                      {...props}
+                      userAuthorized={this.state.userAuthorized}
+                    />
+                  )}
+                />
+                <Route
+                  path="/login"
+                  exact
+                  render={props => (
+                    <Login
+                      {...props}
+                      userAuthorized={this.state.userAuthorized}
+                    />
+                  )}
+                />
+                <Route
+                  path="/logout"
+                  exact
+                  render={props => <Logout {...props} />}
+                />
+                <Route
+                  path="/register"
+                  exact
+                  render={props => (
+                    <Register
+                      {...props}
+                      userAuthorized={this.state.userAuthorized}
+                    />
+                  )}
+                />
+                <Route
+                  path="/myroute"
+                  exact
+                  render={props => (
+                    <RouteMap
+                      {...props}
+                      userAuthorized={this.state.userAuthorized}
+                    />
+                  )}
+                />
+              </Switch>
+            </ContentWrapper>
           </Swipe>
         </Suspense>
       );
