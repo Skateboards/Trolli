@@ -4,15 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Trolli.Models.Requests
+namespace Sabio.Models.Domain
 {
-    public class DingUpdateRequest
+    public class Ding
     {
         public int DingId { get; set; }
 
         public string DingCategory { get; set; }
 
         public string Value { get; set; }
+        public DateTime DateAdded { get; set; }
+
+        public int CreatedBy { get; set; }
 
         public int RouteId { get; set; }
 

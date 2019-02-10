@@ -7,8 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sabio.Data.Providers;
-using Sabio.Data;
 using Sabio.Models.Domain;
+using Sabio.Data;
+using Sabio.Models.Requests;
 
 namespace Trolli.Services.Dings
 {
@@ -25,7 +26,7 @@ namespace Trolli.Services.Dings
         {
             int id = 0;
 
-            string procName = "[dbo].[Test_Insert]";
+            string procName = "[dbo].[Ding_Insert]";
 
             _dataProvider.ExecuteNonQuery(procName
                 , inputParamMapper: delegate (SqlParameterCollection sqlParams)
@@ -37,18 +38,22 @@ namespace Trolli.Services.Dings
                     sqlParams.AddWithValue("@StopId", model.StopId);
                     sqlParams.AddWithValue("@StopDisplayName", model.StopDisplayName);
                     sqlParams.AddWithValue("@Agency", model.Agency);
+                    sqlParams.AddWithValue("@Lat", model.Lat);
+                    sqlParams.AddWithValue("@Long", model.Long);
 
-                    SqlParameter idParameter = new SqlParameter("@Id", System.Data.SqlDbType.Int);
+                    SqlParameter idParameter = new SqlParameter("@DingId", System.Data.SqlDbType.Int);
                     idParameter.Direction = System.Data.ParameterDirection.Output;
 
                     sqlParams.Add(idParameter);
                 }, returnParameters: delegate (SqlParameterCollection sqlParams)
                 {
-                    Int32.TryParse(sqlParams["@Id"].Value.ToString(), out id);
+                    Int32.TryParse(sqlParams["@DingId"].Value.ToString(), out id);
                 }
                 );
             return id;
         }
+
+
         public void Delete(int dingId)
         {
             string storedProc = "dbo.Dings_Delete";
@@ -59,11 +64,11 @@ namespace Trolli.Services.Dings
                 });
         }
 
-        public Sabio.Models.Paged<ding1> Get(int pageIndex, int pageSize)
+        public Sabio.Models.Paged<Ding> Get(int pageIndex, int pageSize)
         {
             int totalCount = 0;
-            Sabio.Models.Paged<ding1> responseBody = null;
-            List<ding1> list = null;
+            Sabio.Models.Paged<Ding> responseBody = null;
+            List<Ding> list = null;
             string procName = "[dbo].[Dings_SelectByPagination]";
             _dataProvider.ExecuteCmd(procName
                 , inputParamMapper: delegate (SqlParameterCollection paramCollection)
@@ -74,7 +79,7 @@ namespace Trolli.Services.Dings
                 }
                   , singleRecordMapper: delegate (IDataReader reader, short set)
                   {
-                      Sabio.Models.Domain.ding1 dings = new ding1();
+                      Sabio.Models.Domain.Ding dings = new Ding();
 
 
                       int startingIndex = 0;
@@ -97,7 +102,7 @@ namespace Trolli.Services.Dings
 
                       if (list == null)
                       {
-                          list = new List<ding1>();
+                          list = new List<Ding>();
                       }
                       list.Add(dings);
 
@@ -106,7 +111,7 @@ namespace Trolli.Services.Dings
                    );
             if (list != null)
             {
-                responseBody = new Sabio.Models.Paged<ding1>(list, pageIndex, pageSize, totalCount);
+                responseBody = new Sabio.Models.Paged<Ding>(list, pageIndex, pageSize, totalCount);
             }
 
             return responseBody;
@@ -115,9 +120,9 @@ namespace Trolli.Services.Dings
 
         public void Update(DingUpdateRequest data)
         {
-            string storeProc = "[dbo].[Dings_Update]";
+            string storedProc = "[dbo].[Dings_Update]";
 
-            _dataProvider.ExecuteNonQuery(storeProc, delegate (SqlParameterCollection sqlParams)
+            _dataProvider.ExecuteNonQuery(storedProc, delegate (SqlParameterCollection sqlParams)
             {
                 sqlParams.AddWithValue("@DingId", data.DingId);
                 sqlParams.AddWithValue("@DingCategory", data.DingCategory);
@@ -132,10 +137,48 @@ namespace Trolli.Services.Dings
             });
         }
 
+        public List<Ding> Post(DingSelectRoute model)
+        {
+
+            string storedProc = "dbo.Dings_SelectList";
+            List<Ding> dingList = new List<Ding>();
+            _dataProvider.ExecuteCmd(storedProc
+                , inputParamMapper: delegate (SqlParameterCollection sqlParams)
+                {
+
+                    DingSelectRoute dingSelect = new DingSelectRoute();
+                    SqlParameter p = new SqlParameter("@RouteId", System.Data.SqlDbType.Structured);
+
+                    if (model.RouteId != null && model.RouteId.Any())
+                    {
+                        p.Value = new Sabio.Data.IntIdTable(model.RouteId);
+                    }
+
+                    sqlParams.Add(p);
+
+                    sqlParams.AddWithValue("@DateAdded", model.Date);
 
 
+                }
+                , singleRecordMapper: delegate (IDataReader reader, short set)
+               {
+                   Ding ding = new Ding();
+                   int startingIndex = 0;
+                   ding.DingId = reader.GetSafeInt32(startingIndex++);
+                   ding.DingCategory = reader.GetSafeString(startingIndex++);
+                   ding.Value = reader.GetSafeString(startingIndex++);
+                   ding.CreatedBy = reader.GetSafeInt32(startingIndex++);
+                   ding.RouteId = reader.GetSafeInt32(startingIndex);
+                   ding.StopId = reader.GetSafeInt32(startingIndex++);
+                   ding.StopDisplayName = reader.GetSafeString(startingIndex++);
+                   ding.Agency = reader.GetSafeString(startingIndex++);
+                   ding.Lat = reader.GetSafeDouble(startingIndex++);
+                   ding.Long = reader.GetSafeDouble(startingIndex++);
+
+                   dingList.Add(ding);
+               });
+            return dingList;
+        }
     }
-
-
 
 }

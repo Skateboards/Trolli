@@ -9,6 +9,7 @@ using System.Web.Http;
 using Sabio.Models.Responses;
 using Sabio.Models;
 using Sabio.Models.Domain;
+using Sabio.Models.Requests;
 
 namespace Trolli.Web.Controllers.Api
 {
@@ -67,12 +68,25 @@ namespace Trolli.Web.Controllers.Api
         public HttpResponseMessage Get(int pageIndex, int pageSize)
         {
 
-            ItemResponse<Paged<ding1>> response = new ItemResponse<Paged<ding1>>();
+            ItemResponse<Paged<Ding>> response = new ItemResponse<Paged<Ding>>();
             response.Item = _service.Get(pageIndex, pageSize);
             if (response.Item == null)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
 
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, response);
+        }
+
+
+
+        [Route("routes"), HttpPost]
+        public HttpResponseMessage Post(DingSelectRoute model)
+        {
+
+            ItemsResponse<Ding> response = new ItemsResponse<Ding>();
+            {
+                response.Items = _service.Post(model);
             }
             return Request.CreateResponse(HttpStatusCode.OK, response);
         }
