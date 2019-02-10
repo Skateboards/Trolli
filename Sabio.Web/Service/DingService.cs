@@ -10,6 +10,7 @@ using Sabio.Data.Providers;
 using Sabio.Models.Domain;
 using Sabio.Data;
 using Sabio.Models.Requests;
+using Sabio.Models;
 
 namespace Trolli.Services.Dings
 {
@@ -122,9 +123,10 @@ namespace Trolli.Services.Dings
         }
 
 
-        public List<Ding> GetMine(int userId, int pageIndex, int pageSize)
+        public Paged<Ding> GetMine(int userId, int pageIndex, int pageSize)
         {
             int totalCount = 0;
+            Sabio.Models.Paged<Ding> responseBody = null;
             List<Ding> list = null;
             string procName = "[dbo].[Dings_SelectMineByPage]";
             _dataProvider.ExecuteCmd(procName
@@ -164,8 +166,13 @@ namespace Trolli.Services.Dings
                       list.Add(dings);
                   }
                    );
+            if (list != null)
+            {
+                responseBody = new Sabio.Models.Paged<Ding>(list, pageIndex, pageSize, totalCount);
+            }
 
-            return list;
+            return responseBody;
+
         }
 
 

@@ -33,7 +33,7 @@ export default class DingInfiniteScrollContainerMine extends Component {
           noDings: true
         });
       } else {
-        resp.item.forEach(ding => dings.push(ding));
+        resp.item.pagedItems.forEach(ding => dings.push(ding));
 
         this.setState({
           dings,
