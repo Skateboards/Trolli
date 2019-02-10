@@ -59,11 +59,11 @@ namespace Trolli.Services.Dings
                 });
         }
 
-        public Sabio.Models.Paged<Ding> Get(int pageIndex, int pageSize)
+        public Sabio.Models.Paged<ding1> Get(int pageIndex, int pageSize)
         {
             int totalCount = 0;
-            Sabio.Models.Paged<Ding> responseBody = null;
-            List<Ding> list = null;
+            Sabio.Models.Paged<ding1> responseBody = null;
+            List<ding1> list = null;
             string procName = "[dbo].[Dings_SelectByPagination]";
             _dataProvider.ExecuteCmd(procName
                 , inputParamMapper: delegate (SqlParameterCollection paramCollection)
@@ -74,7 +74,7 @@ namespace Trolli.Services.Dings
                 }
                   , singleRecordMapper: delegate (IDataReader reader, short set)
                   {
-                      Sabio.Models.Domain.Ding dings = new Ding();
+                      Sabio.Models.Domain.ding1 dings = new ding1();
 
 
                       int startingIndex = 0;
@@ -97,7 +97,7 @@ namespace Trolli.Services.Dings
 
                       if (list == null)
                       {
-                          list = new List<Ding>();
+                          list = new List<ding1>();
                       }
                       list.Add(dings);
 
@@ -106,7 +106,7 @@ namespace Trolli.Services.Dings
                    );
             if (list != null)
             {
-                responseBody = new Sabio.Models.Paged<Ding>(list, pageIndex, pageSize, totalCount);
+                responseBody = new Sabio.Models.Paged<ding1>(list, pageIndex, pageSize, totalCount);
             }
 
             return responseBody;

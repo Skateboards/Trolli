@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Sabio.Models.Domain
 {
-    public class Ding
+    public class ding1
     {
         public int DingId { get; set; }
 
