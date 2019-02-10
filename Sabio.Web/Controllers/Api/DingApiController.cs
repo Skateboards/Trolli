@@ -64,10 +64,9 @@ namespace Trolli.Web.Controllers.Api
             return Request.CreateResponse(HttpStatusCode.Created, responseBody);
         }
 
-        [Route("{pageIndex:int}/{pageSize:int}"), HttpGet]
+        [Route, HttpGet]
         public HttpResponseMessage Get(int pageIndex, int pageSize)
         {
-
             ItemResponse<Paged<Ding>> response = new ItemResponse<Paged<Ding>>();
             response.Item = _service.Get(pageIndex, pageSize);
             if (response.Item == null)

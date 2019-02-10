@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import InfiniteScroll from "react-infinite-scroller";
+import DingDisplaySmall from "./DingDisplaySmall";
+// import PageLoader from "../PageLoader";
 
 import * as dingSvc from "../../Services/dingService";
 
@@ -9,82 +11,50 @@ export default class DingInfiniteScrollContainer extends Component {
 
     this.state = {
       dings: [],
-      hasNextPage: false,
-      pageIndex: 0,
-      pageSize: 3
+      hasNextPage: true
     };
+
+    this.pageIndex = 0;
+    this.pageSize = 5;
   }
 
   loadItems(page) {
-    var self = this;
-
     const qStr = {
-      pageSize: this.state.pageSize,
-      pageIndex: this.state.pageIndex,
-      lat: this.location.lat,
-      long: this.location.long
+      pageSize: this.pageSize,
+      pageIndex: this.pageIndex
     };
 
-    qwest
-      .get(
-        url,
-        {
-          client_id: api.client_id,
-          linked_partitioning: 1,
-          page_size: 10
-        },
-        {
-          cache: true
-        }
-      )
-      .then(function(xhr, resp) {
-        if (resp) {
-          var tracks = self.state.tracks;
-          resp.collection.map(track => {
-            if (track.artwork_url == null) {
-              track.artwork_url = track.user.avatar_url;
-            }
+    dingSvc.getPageNearby(qStr).then(resp => {
+      let dings = [...this.state.dings];
+      resp.item.pagedItems.forEach(ding => dings.push(ding));
 
-            tracks.push(track);
-          });
-
-          if (resp.next_href) {
-            self.setState({
-              tracks: tracks,
-              nextHref: resp.next_href
-            });
-          } else {
-            self.setState({
-              hasMoreItems: false
-            });
-          }
-        }
+      this.setState({
+        dings,
+        hasNextPage: resp.item.hasNextPage
       });
+
+      this.pageIndex++;
+    });
   }
 
-  render() {
-    const loader = <div className="loader">Loading ...</div>;
+  mapDingToDisplay = ding => {
+    return (
+      <DingDisplaySmall key={Math.random().toString() + ding.id} ding={ding} />
+    );
+  };
 
-    var items = [];
-    this.state.tracks.map((track, i) => {
-      items.push(
-        <div className="track" key={i}>
-          <a href={track.permalink_url} target="_blank">
-            <img src={track.artwork_url} width="150" height="150" />
-            <p className="title">{track.title}</p>
-          </a>
-        </div>
-      );
-    });
+  render() {
+    // const loader = <PageLoader />;
 
     return (
       <InfiniteScroll
         pageStart={0}
         loadMore={this.loadItems.bind(this)}
-        hasMore={this.state.hasMoreItems}
-        loader={loader}
+        hasMore={this.state.hasNextPage}
+        // loader={loader}
       >
-        <div className="tracks">{items}</div>
+        {this.state.dings.length > 0 &&
+          this.state.dings.map(this.mapDingToDisplay)}
       </InfiniteScroll>
     );
   }

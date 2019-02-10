@@ -20,7 +20,7 @@ const create = payload => {
   const config = {
     data: payload,
     method: "POST",
-    url: "http://localhost:3024/api/trolli",
+    url: "/api/trolli",
     withCredentials: true,
     crossDomain: true,
     headers: { "Content-Type": "application/json" }
@@ -34,7 +34,7 @@ const create = payload => {
 const getPageNearby = qStr => {
   const config = {
     method: "GET",
-    url: "/api/dings/nearby?" + qs.stringify(qStr),
+    url: "/api/trolli?" + qs.stringify(qStr),
     headers: { "Content-Type": "application/json" }
   };
 

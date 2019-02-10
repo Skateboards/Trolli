@@ -1,25 +1,20 @@
 import React, { PureComponent } from "react";
 import { Jumbotron, Container } from "reactstrap";
 
-import DingDisplaySmall from "./Dings/DingDisplaySmall";
+import DingInfiniteScrollContainer from "./Dings/DingInfiniteScrollContainer";
 
 export default class HomePage extends PureComponent {
   state = {
-    nearbyDings: []
-  };
-  mapDingToDisplay = ding => {
-    return <DingDisplaySmall dingData={ding} />;
+    dings: false
   };
 
   getNearbyDings = () => {
-    const nearbyDings = ["a", "b", "c", "d", "e", "f", "g"];
     this.setState({
-      nearbyDings
+      dings: true
     });
   };
 
   render() {
-    const { nearbyDings } = this.state;
     return (
       <div className="bg-light-blue">
         <Jumbotron fluid className="text-center mb-0 bg-light-blue">
@@ -65,7 +60,9 @@ export default class HomePage extends PureComponent {
             </div>
           </Container>
         </Jumbotron>
-        <Container fluid>{nearbyDings.map(this.mapDingToDisplay)}</Container>
+        <Container fluid>
+          {this.state.dings && <DingInfiniteScrollContainer />}
+        </Container>
       </div>
     );
   }
