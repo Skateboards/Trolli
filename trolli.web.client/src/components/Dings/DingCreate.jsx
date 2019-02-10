@@ -3,6 +3,7 @@ import { Form, Formik } from "formik";
 import { Row, Button, Label, Input } from "reactstrap";
 import * as schemas from "../../models/dingsSchemas";
 import * as dingService from "../../Services/dingService";
+import constants from "../Dings/constRoutes";
 
 class DingCreate extends React.Component {
   constructor(props) {
@@ -14,49 +15,63 @@ class DingCreate extends React.Component {
       categorys: [],
       addressId: undefined,
       inputHide: "d-none",
-      addressValue: null
+      addressValue: null,
+      selectedAgency: ""
     };
     this.state.dings = this.validation.initialValues;
   }
-  componentDidMount() {
-    dingService
-      .getRoutes()
-      .then(r => console.log(r))
-      .catch(r => console.log(r));
-  }
+  componentDidMount() {}
   handleSubmitDing = (values, obj) => {
     debugger;
-    var data = {
-      DingCategory: values.category,
-      Value: values.message,
-      CreatedBy: "Gurgen",
-      RouteId: values.route,
-      StopId: 1,
-      StopDisplayName: "Maria street",
-      Agency: "Test Agency",
-      Lat: 1212,
-      Long: 122112
-    };
-    // if (this.props.match.params.uid === undefined) {
-    //   sponsorServices
-    //     .add(data)
-    //     .then(this.onAddSponsorSucsses)
-    //     .catch(this.onAddSponsorError);
-    // } else {
-    //   sponsorServices
-    //     .update(data, this.props.match.params.uid)
-    //     .then(this.onUpdateSponsorSucsses)
-    //     .catch(this.onUpdateSponsorError);
-    // }
+    var data;
+    navigator.geolocation.getCurrentPosition(response => {
+      const location = {
+        lat: response.coords.latitude,
+        long: response.coords.longitude,
+        date: new Date()
+      };
+      data = {
+        DingCategory: values.category,
+        Value: values.message,
+        CreatedBy: 1,
+        RouteId: 1,
+        StopId: 1,
+        StopDisplayName: values.route,
+        Agency: values.agency,
+        Lat: response.coords.latitude == null ? 0 : response.coords.latitude,
+        Long: response.coords.longitude == null ? 0 : response.coords.latitude
+      };
+      dingService
+        .create(data)
+        .then(() => this.props.history.push("/"))
+        .catch(console.log("error"));
+    });
   };
   hand = a => {
-    if (a.target.value === "lametro-rail" || a.target.value === "lametro") {
-      this.setState({ inputHide: "" });
+    if (a.target.value === "lametro") {
+      this.setState({ inputHide: "", selectedAgency: a.target.value });
+    }
+    if (a.target.value === "lametro-rail") {
+      this.setState({ inputHide: "", selectedAgency: a.target.value });
     }
     if (a.target.value === "") {
-      this.setState({ inputHide: "d-none" });
+      this.setState({ inputHide: "d-none", selectedAgency: "" });
     }
     console.log(a.target.value);
+  };
+  renderLametro = lametro => {
+    return (
+      <option key={lametro.id} value={lametro.display_name}>
+        {lametro.display_name}
+      </option>
+    );
+  };
+  renderLametroRail = lametroRail => {
+    return (
+      <option key={lametroRail.id} value={lametroRail.display_name}>
+        {lametroRail.display_name}
+      </option>
+    );
   };
   render() {
     return (
@@ -133,7 +148,17 @@ class DingCreate extends React.Component {
                               style={{ display: "block" }}
                             >
                               <option value="" label="Select Type" />
-                              {/* {this.state.routes.map(this.renderOptions)} */}
+                              {this.state.selectedAgency == "lametro-rail"
+                                ? constants.routse.lametroRail.map(
+                                    this.renderLametroRail
+                                  )
+                                : this.state.selectedAgency == "lametro"
+                                ? constants.routse.lametro.map(
+                                    this.renderLametroRail
+                                  )
+                                : ""
+                              /* {this.state.routes.map(this.renderOptions)} */
+                              }
                             </select>
                             {errors.route && touched.route && (
                               <div className="input-feedback text-danger">
@@ -154,7 +179,12 @@ class DingCreate extends React.Component {
                               style={{ display: "block" }}
                             >
                               <option value="" label="Select Type" />
-                              {/* {this.state.categorys.map(this.renderOptions)} */}
+                              <option value="Delay" label="Delay" />
+                              <option value="Disturbance" label="Disturbance" />
+                              <option
+                                value="Route Closed"
+                                label="Route Closed"
+                              />
                             </select>
                             {errors.category && touched.category && (
                               <div className="input-feedback text-danger">

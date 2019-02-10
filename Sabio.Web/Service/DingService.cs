@@ -26,7 +26,7 @@ namespace Trolli.Services.Dings
         {
             int id = 0;
 
-            string procName = "[dbo].[Test_Insert]";
+            string procName = "[dbo].[Ding_Insert]";
 
             _dataProvider.ExecuteNonQuery(procName
                 , inputParamMapper: delegate (SqlParameterCollection sqlParams)
@@ -38,14 +38,16 @@ namespace Trolli.Services.Dings
                     sqlParams.AddWithValue("@StopId", model.StopId);
                     sqlParams.AddWithValue("@StopDisplayName", model.StopDisplayName);
                     sqlParams.AddWithValue("@Agency", model.Agency);
+                    sqlParams.AddWithValue("@Lat", model.Lat);
+                    sqlParams.AddWithValue("@Long", model.Long);
 
-                    SqlParameter idParameter = new SqlParameter("@Id", System.Data.SqlDbType.Int);
+                    SqlParameter idParameter = new SqlParameter("@DingId", System.Data.SqlDbType.Int);
                     idParameter.Direction = System.Data.ParameterDirection.Output;
 
                     sqlParams.Add(idParameter);
                 }, returnParameters: delegate (SqlParameterCollection sqlParams)
                 {
-                    Int32.TryParse(sqlParams["@Id"].Value.ToString(), out id);
+                    Int32.TryParse(sqlParams["@DingId"].Value.ToString(), out id);
                 }
                 );
             return id;

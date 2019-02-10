@@ -1,9 +1,4 @@
 import axios from "axios";
-const key = "AIzaSyC54wON_jHY4WTYo__qxvRwOdd-aYoV1_s";
-const routeAPI = "https://maps.googleapis.com/maps/api/directions/json?";
-const geoLocationAPI =
-  "https://maps.googleapis.com/maps/api/geocode/json?address=";
-
 const getRoutes = (originLatLong, destinationLatLong) => {
   const config = {
     method: "GET",
@@ -17,5 +12,19 @@ const getRoutes = (originLatLong, destinationLatLong) => {
     .then(global.onGlobalSuccess)
     .catch(global.onGlobalError);
 };
+const create = payload => {
+  const config = {
+    data: payload,
+    method: "POST",
+    url: "http://localhost:3024/api/trolli",
+    withCredentials: true,
+    crossDomain: true,
+    headers: { "Content-Type": "application/json" }
+  };
 
-export { getRoutes };
+  return axios(config)
+    .then(global.onGlobalSuccess)
+    .catch(global.onGlobalError);
+};
+
+export { getRoutes, create };
