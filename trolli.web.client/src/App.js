@@ -1,16 +1,16 @@
-import React, { Component } from "react";
+import React, { Component, Suspense, lazy } from "react";
 import { Route, withRouter, Switch } from "react-router-dom";
 import "./App.css";
 
-import NavBar from "./components/NavBar";
-import HomePage from "./components/HomePage";
-import RouteMap from "./components/RouteMap";
-import Login from "./components/AuthFlow/Login";
-import Register from "./components/AuthFlow/Register";
 import PageLoader from "./components/PageLoader";
-import Logout from "./components/AuthFlow/Logout";
-
 import * as userService from "./Services/userService";
+
+const NavBar = lazy(() => import("./components/NavBar"));
+const HomePage = lazy(() => import("./components/HomePage"));
+const RouteMap = lazy(() => import("./components/RouteMap"));
+const Login = lazy(() => import("./components/AuthFlow/Login"));
+const Register = lazy(() => import("./components/AuthFlow/Register"));
+const Logout = lazy(() => import("./components/AuthFlow/Logout"));
 
 const listofAnonymousPages = [
   "/goodbye",
@@ -112,13 +112,7 @@ class App extends Component {
     let content = null;
     if (listofAnonymousPages.indexOf(this.props.location.pathname) > -1) {
       content = (
-        <React.Fragment>
-          <Route
-            path="/"
-            render={props => (
-              <NavBar {...props} isAuth={this.state.userAuthorized} />
-            )}
-          />
+        <Suspense fallback={<PageLoader />}>
           <Switch>
             <Route
               path="/login"
@@ -138,7 +132,7 @@ class App extends Component {
               )}
             />
           </Switch>
-        </React.Fragment>
+        </Suspense>
       );
     } else {
       content = this.getContent();
@@ -150,7 +144,7 @@ class App extends Component {
     let content = null;
     if (this.state.userAuthorized) {
       content = (
-        <React.Fragment>
+        <Suspense fallback={<PageLoader />}>
           <Route
             path="/"
             render={props => (
@@ -201,7 +195,7 @@ class App extends Component {
               )}
             />
           </Switch>
-        </React.Fragment>
+        </Suspense>
       );
     } else {
       content = <PageLoader />;
