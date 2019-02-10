@@ -8,10 +8,11 @@ import * as userService from "./Services/userService";
 
 const NavBar = lazy(() => import("./components/NavBar"));
 const HomePage = lazy(() => import("./components/HomePage"));
-const RouteMap = lazy(() => import("./components/RouteMap"));
+const RouteMap = lazy(() => import("./components/routemap"));
 const Login = lazy(() => import("./components/AuthFlow/Login"));
 const Register = lazy(() => import("./components/AuthFlow/Register"));
 const Logout = lazy(() => import("./components/AuthFlow/Logout"));
+const DingCreate = lazy(() => import("./components/Dings/DingCreate"));
 
 const listofAnonymousPages = [
   "/goodbye",
@@ -189,6 +190,18 @@ class App extends Component {
                 exact
                 render={props => <Logout {...props} />}
               />
+
+              <Route
+                path="/ding/new"
+                exact
+                render={props => (
+                  <DingCreate
+                    {...props}
+                    userAuthorized={this.state.userAuthorized}
+                  />
+                )}
+              />
+
               <Route
                 path="/register"
                 exact
