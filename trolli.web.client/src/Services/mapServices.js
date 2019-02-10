@@ -28,8 +28,9 @@ const getRoute = (originLatLong, destinationLatLong) => {
 
 const geoLocation = (mapImageURL, onSuccess, onError) => {
   const config = {
-    method: "GET",
-    url: geoLocationAPI + mapImageURL + "&key=" + key,
+    method: "PUT",
+    payload: { url: geoLocationAPI + mapImageURL + "&key=" + key },
+    url: "http://localhost:3024/api/routes",
     withCredentials: true,
     crossDomain: true,
     headers: {

@@ -69,6 +69,8 @@ namespace Trolli.Services.Dings
                 sqlParams.AddWithValue("@StopId", data.StopId);
                 sqlParams.AddWithValue("@StopDisplayName", data.StopDisplayName);
                 sqlParams.AddWithValue("@Agency", data.Agency);
+                sqlParams.AddWithValue("@Lat", data.Lat);
+                sqlParams.AddWithValue("@Long", data.Long);
 
             });
         }

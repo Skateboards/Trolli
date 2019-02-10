@@ -10,8 +10,9 @@ using Sabio.Models.Responses;
 
 namespace Trolli.Web.Controllers.Api
 {
-    [RoutePrefix("api/trolli")]
     [AllowAnonymous]
+    [RoutePrefix("api/trolli")]
+
     public class DingApiController : ApiController
     {
         private readonly DingService _service;
@@ -24,6 +25,10 @@ namespace Trolli.Web.Controllers.Api
         [Route, HttpPost]
         public HttpResponseMessage Create(DigAddRequest model)
         {
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            }
             ItemResponse<int> response = new ItemResponse<int>();
 
             response.Item = _service.Insert(model);
@@ -40,6 +45,20 @@ namespace Trolli.Web.Controllers.Api
             _service.Delete(id);
 
             return Request.CreateResponse(HttpStatusCode.OK, response);
+
+        }
+
+        [Route("{id:int}"), HttpPut]
+        public HttpResponseMessage Update(int id, DingUpdateRequest data)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            }
+            _service.Update(data);
+            SuccessResponse responseBody = new SuccessResponse();
+            return Request.CreateResponse(HttpStatusCode.Created, responseBody);
         }
     }
 }
