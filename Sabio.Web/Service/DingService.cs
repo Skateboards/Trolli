@@ -7,6 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sabio.Data.Providers;
+using Sabio.Models.Domain;
+using Sabio.Data;
+using Sabio.Models.Requests;
 
 namespace Trolli.Services.Dings
 {
@@ -47,6 +50,8 @@ namespace Trolli.Services.Dings
                 );
             return id;
         }
+
+
         public void Delete(int dingId)
         {
             string storedProc = "dbo.Dings_Delete";
@@ -56,11 +61,13 @@ namespace Trolli.Services.Dings
                     sqlParameter.AddWithValue("@DingId", dingId);
                 });
         }
+
+
         public void Update(DingUpdateRequest data)
         {
-            string storeProc = "[dbo].[Dings_Update]";
+            string storedProc = "[dbo].[Dings_Update]";
 
-            _dataProvider.ExecuteNonQuery(storeProc, delegate (SqlParameterCollection sqlParams)
+            _dataProvider.ExecuteNonQuery(storedProc, delegate (SqlParameterCollection sqlParams)
             {
                 sqlParams.AddWithValue("@DingId", data.DingId);
                 sqlParams.AddWithValue("@DingCategory", data.DingCategory);
@@ -73,6 +80,48 @@ namespace Trolli.Services.Dings
             });
         }
 
+        public List<Ding> Post(List<int> RouteId, DateTime Date)
+        {
+
+            string storedProc = "dbo.Dings_SelectList";
+            List<Ding> dingList = new List<Ding>();
+            _dataProvider.ExecuteCmd(storedProc
+                , inputParamMapper: delegate (SqlParameterCollection sqlParams)
+                {
+
+                    DingSelectRoute dingSelect = new DingSelectRoute();
+                    SqlParameter p = new SqlParameter("@RouteId", System.Data.SqlDbType.Structured);
+
+                    if (dingSelect != null && dingSelect.RouteId.Any())
+                    {
+                        p.Value = new Sabio.Data.IntIdTable(dingSelect.RouteId);
+                    }
+
+                    sqlParams.Add(p);
+
+                    sqlParams.AddWithValue("@Date", dingSelect.Date);
+
+
+                }
+                , singleRecordMapper: delegate (IDataReader reader, short set)
+               {
+                   Ding ding = new Ding();
+                   int startingIndex = 0;
+                   ding.DingId = reader.GetSafeInt32(startingIndex++);
+                   ding.DingCategory = reader.GetSafeString(startingIndex++);
+                   ding.Value = reader.GetSafeString(startingIndex++);
+                   ding.CreatedBy = reader.GetSafeInt32(startingIndex++);
+                   ding.RouteId = reader.GetSafeInt32(startingIndex);
+                   ding.StopId = reader.GetSafeInt32(startingIndex++);
+                   ding.StopDisplayName = reader.GetSafeString(startingIndex++);
+                   ding.Agency = reader.GetSafeString(startingIndex++);
+                   ding.Lat = reader.GetSafeDouble(startingIndex++);
+                   ding.Long = reader.GetSafeDouble(startingIndex++);
+
+                   dingList.Add(ding);
+               });
+            return dingList;
+        }
     }
 
 }

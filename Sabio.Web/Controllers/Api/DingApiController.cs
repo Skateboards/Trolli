@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Sabio.Models.Responses;
+using Sabio.Models.Domain;
 
 namespace Trolli.Web.Controllers.Api
 {
@@ -39,6 +40,19 @@ namespace Trolli.Web.Controllers.Api
 
             _service.Delete(id);
 
+            return Request.CreateResponse(HttpStatusCode.OK, response);
+        }
+
+
+
+        [Route("routes"), HttpPost]
+        public HttpResponseMessage Post(List<int> RouteId, DateTime Date)
+        {
+
+            ItemsResponse<Ding> response = new ItemsResponse<Ding>();
+            {
+                response.Items = _service.Post(RouteId, Date);
+            }
             return Request.CreateResponse(HttpStatusCode.OK, response);
         }
     }
