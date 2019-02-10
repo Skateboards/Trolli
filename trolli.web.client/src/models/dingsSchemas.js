@@ -6,7 +6,7 @@ const getDingSchema = () =>
     route: Yup.string().required("Required"),
     category: Yup.string().required("Required"),
     message: Yup.string()
-      .max(200)
+      .max(100)
       .required("Required")
   });
 

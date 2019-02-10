@@ -1,4 +1,7 @@
+import * as global from "./serviceHelpers";
 import axios from "axios";
+import qs from "qs";
+
 const getRoutes = (originLatLong, destinationLatLong) => {
   const config = {
     method: "GET",
@@ -12,11 +15,12 @@ const getRoutes = (originLatLong, destinationLatLong) => {
     .then(global.onGlobalSuccess)
     .catch(global.onGlobalError);
 };
+
 const create = payload => {
   const config = {
     data: payload,
     method: "POST",
-    url: "http://localhost:3024/api/trolli",
+    url: "/api/trolli",
     withCredentials: true,
     crossDomain: true,
     headers: { "Content-Type": "application/json" }
@@ -27,4 +31,28 @@ const create = payload => {
     .catch(global.onGlobalError);
 };
 
-export { getRoutes, create };
+const getPageNearby = qStr => {
+  const config = {
+    method: "GET",
+    url: "/api/trolli?" + qs.stringify(qStr),
+    headers: { "Content-Type": "application/json" }
+  };
+
+  return axios(config)
+    .then(global.onGlobalSuccess)
+    .catch(global.onGlobalError);
+};
+
+const getPageMine = qStr => {
+  const config = {
+    method: "GET",
+    url: "/api/trolli/mydings?" + qs.stringify(qStr),
+    headers: { "Content-Type": "application/json" }
+  };
+
+  return axios(config)
+    .then(global.onGlobalSuccess)
+    .catch(global.onGlobalError);
+};
+
+export { getPageNearby, create, getRoutes, getPageMine };

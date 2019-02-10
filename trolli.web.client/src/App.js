@@ -1,10 +1,10 @@
 import React, { Component, Suspense, lazy } from "react";
 import { Route, withRouter, Switch } from "react-router-dom";
-import Swipe from "react-easy-swipe";
 import "./App.css";
 
 import PageLoader from "./components/PageLoader";
 import * as userService from "./Services/userService";
+import ContentWrapper from "./components/ContentWrapper";
 
 const NavBar = lazy(() => import("./components/NavBar"));
 const HomePage = lazy(() => import("./components/HomePage"));
@@ -13,6 +13,7 @@ const Login = lazy(() => import("./components/AuthFlow/Login"));
 const Register = lazy(() => import("./components/AuthFlow/Register"));
 const Logout = lazy(() => import("./components/AuthFlow/Logout"));
 const DingCreate = lazy(() => import("./components/Dings/DingCreate"));
+const MyDings = lazy(() => import("./components/Dings/MyDings"));
 
 const listofAnonymousPages = [
   "/goodbye",
@@ -110,37 +111,34 @@ class App extends Component {
     console.log(err);
   }
 
-  onSwipeMove(position, props) {
-    if (position.x > 145 && position.y < 50 && position.y > -50) {
-      props.history.goBack();
-    } else if (position.x < -145 && position.y < 50 && position.y > -50) {
-      props.history.goForward();
-    }
-  }
-
   render() {
     let content = null;
     if (listofAnonymousPages.indexOf(this.props.location.pathname) > -1) {
       content = (
         <Suspense fallback={<PageLoader />}>
           <Switch>
-            <Route
-              path="/login"
-              exact
-              render={props => (
-                <Login {...props} userAuthorized={this.state.userAuthorized} />
-              )}
-            />
-            <Route
-              path="/register"
-              exact
-              render={props => (
-                <Register
-                  {...props}
-                  userAuthorized={this.state.userAuthorized}
-                />
-              )}
-            />
+            <ContentWrapper>
+              <Route
+                path="/login"
+                exact
+                render={props => (
+                  <Login
+                    {...props}
+                    userAuthorized={this.state.userAuthorized}
+                  />
+                )}
+              />
+              <Route
+                path="/register"
+                exact
+                render={props => (
+                  <Register
+                    {...props}
+                    userAuthorized={this.state.userAuthorized}
+                  />
+                )}
+              />
+            </ContentWrapper>
           </Switch>
         </Suspense>
       );
@@ -155,9 +153,7 @@ class App extends Component {
     if (this.state.userAuthorized) {
       content = (
         <Suspense fallback={<PageLoader />}>
-          <Swipe
-            onSwipeMove={position => this.onSwipeMove(position, this.props)}
-          >
+          <ContentWrapper>
             <Route
               path="/"
               render={props => (
@@ -203,6 +199,12 @@ class App extends Component {
               />
 
               <Route
+                path="/mydings"
+                exact
+                render={props => <MyDings {...props} />}
+              />
+
+              <Route
                 path="/register"
                 exact
                 render={props => (
@@ -223,7 +225,7 @@ class App extends Component {
                 )}
               />
             </Switch>
-          </Swipe>
+          </ContentWrapper>
         </Suspense>
       );
     } else {
