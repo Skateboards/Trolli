@@ -1,4 +1,5 @@
-﻿using Sabio.Models.Domain;
+﻿using Sabio.Models.Requests;
+using Sabio.Models.Domain;
 using Sabio.Models.Responses;
 using Sabio.Web.Service;
 using System;
@@ -21,22 +22,31 @@ namespace Sabio.Web.Controllers
             _service = service;
         }
 
-        [Route("{id:int}"), HttpGet]
-        public HttpResponseMessage GetById(int id)
+        [Route, HttpPost]
+        public HttpResponseMessage Create(Troll_UserAddRequest model)
         {
-            ItemResponse<TrolliUsers> responseBody = new ItemResponse<TrolliUsers>();
-            responseBody.Item = _service.GetById(id);
-            return Request.CreateResponse(HttpStatusCode.Created, responseBody);
-        }
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            }
+            ItemResponse<int> response = new ItemResponse<int>();
 
-        [Route("{id:int}"), HttpDelete]
-        public HttpResponseMessage Delete(int id)
-        {
-            ItemResponse<bool> response = new ItemResponse<bool>();
-            _service.Delete(id);
-            response.Item = true;
+            response.Item = _service.Insert(model);
 
             return Request.CreateResponse(HttpStatusCode.OK, response);
+        }
+
+        [Route("{id:int}"), HttpPut]
+        public HttpResponseMessage Update(int id, Troll_UserUpdateRequest data)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            }
+            _service.Update(data);
+            SuccessResponse responseBody = new SuccessResponse();
+            return Request.CreateResponse(HttpStatusCode.Created, responseBody);
         }
     }
 }

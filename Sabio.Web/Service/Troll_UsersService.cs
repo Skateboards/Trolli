@@ -1,5 +1,6 @@
 ﻿using Sabio.Data;
 using Sabio.Data.Providers;
+using Sabio.Models.Requests;
 using Sabio.Models.Domain;
 using System;
 using System.Collections.Generic;
@@ -47,7 +48,41 @@ namespace Sabio.Web.Service
             return trolliData;
 
         }
+        public int Insert(Troll_UserAddRequest model)
+        {
+            int id = 0;
 
+            string procName = "[dbo].[Trolli_User_Insert]";
+
+            _dataProvider.ExecuteNonQuery(procName
+                , inputParamMapper: delegate (SqlParameterCollection sqlParams)
+                {
+                    sqlParams.AddWithValue("@Password", model.Password);
+                    sqlParams.AddWithValue("@UserName", model.UserName);
+
+                    SqlParameter idParameter = new SqlParameter("@Id", System.Data.SqlDbType.Int);
+                    idParameter.Direction = System.Data.ParameterDirection.Output;
+
+                    sqlParams.Add(idParameter);
+                }, returnParameters: delegate (SqlParameterCollection sqlParams)
+                {
+                    Int32.TryParse(sqlParams["@Id"].Value.ToString(), out id);
+                }
+                );
+            return id;
+        }
+
+        public void Update(Troll_UserUpdateRequest data)
+        {
+            string storeProc = "[dbo].[Trolli_User_Update]";
+
+            _dataProvider.ExecuteNonQuery(storeProc, delegate (SqlParameterCollection sqlParams)
+            {
+                sqlParams.AddWithValue("@Id", data.Id);
+                sqlParams.AddWithValue("@UserName", data.UserName);
+                sqlParams.AddWithValue("@Password", data.Password);
+            });
+        }
         public void Delete(int Id)
         {
             string storeProc = "[dbo].[Trolli_User_Delete]";
@@ -61,5 +96,4 @@ namespace Sabio.Web.Service
         }
 
     }
-
 }
