@@ -17,7 +17,11 @@ export default class HomePage extends PureComponent {
             <Button color="primary" className="btn-block">
               Suggested Routes
             </Button>
-            <Button color="secondary" className="btn-block">
+            <Button
+              color="secondary"
+              className="btn-block"
+              onClick={() => this.props.history.push("/ding/new")}
+            >
               New Ding
             </Button>
           </Container>
