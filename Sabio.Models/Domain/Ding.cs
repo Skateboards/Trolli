@@ -14,6 +14,8 @@ namespace Sabio.Models.Domain
 
         public string Value { get; set; }
 
+        public DateTime DateAdded { get; set; }
+
         public int CreatedBy { get; set; }
 
         public int RouteId { get; set; }
@@ -27,5 +29,7 @@ namespace Sabio.Models.Domain
         public double Lat { get; set; }
 
         public double Long { get; set; }
+
+        public double Miles { get; set; }
     }
 }
