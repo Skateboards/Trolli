@@ -105,138 +105,142 @@ class DingCreate extends React.Component {
                             </div>
                           </div>
 
-                        <div className="card-body">
-                          <fieldset>
-                            <Label className="col-form-label text-primary">
-                              Agency
-                            </Label>
-                            <select
-                              className="form-control"
-                              name="agency"
-                              value={values.agency}
-                              onChange={handleChange}
-                              onClick={this.hand}
-                              onBlur={handleBlur}
-                              style={{ display: "block" }}
-                            >
-                              <option value="" label="Select Type" />
-                              <option value="lametro" label="lametro" />
-                              <option
-                                value="lametro-rail"
-                                label="lametro-rail"
-                              />
-                            </select>
-                            {errors.agency && touched.agency && (
-                              <div className="input-feedback text-danger">
-                                {errors.agency}
-                              </div>
-                            )}
-                          </fieldset>
-                          <fieldset className={this.state.inputHide}>
-                            <Label className="col-form-label text-primary">
-                              Route
-                            </Label>
-                            <select
-                              className="form-control"
-                              name="route"
-                              value={values.route}
-                              onChange={handleChange}
-                              onClick={this.routeClick}
-                              onBlur={handleBlur}
-                              style={{ display: "block" }}
-                            >
-                              <option value="" label="Select Type" />
-                              {this.state.selectedAgency === "lametro-rail"
-                                ? constants.routse.lametroRail.map(
-                                    this.renderLametroRail
-                                  )
-                                : this.state.selectedAgency === "lametro"
-                                ? constants.routse.lametro.map(
-                                    this.renderLametroRail
-                                  )
-                                : ""}
-                            </select>
-                            {errors.route && touched.route && (
-                              <div className="input-feedback text-danger">
-                                {errors.route}
-                              </div>
-                            )}
-                          </fieldset>
-                          <fieldset className={this.state.inputHide}>
-                            <Label className="col-form-label text-primary">
-                              Category
-                            </Label>
-                            <select
-                              className="form-control"
-                              name="category"
-                              value={values.category}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              style={{ display: "block" }}
-                            >
-                              <option value="" label="Select Type" />
-                              <option value="Delay" label="Delay" />
-                              <option value="Disturbance" label="Disturbance" />
-                              <option
-                                value="Route Closed"
-                                label="Route Closed"
-                              />
-                            </select>
-                            {errors.category && touched.category && (
-                              <div className="input-feedback text-danger">
-                                {errors.category}
-                              </div>
-                            )}
-                          </fieldset>
-                          <fieldset className={this.state.inputHide}>
-                            <div className="row">
-                              <Label
-                                className="col-xl-2 col-form-label text-primary"
-                                for="message"
-                              >
-                                Message
+                          <div className="card-body">
+                            <fieldset>
+                              <Label className="col-form-label text-primary">
+                                Agency
                               </Label>
-                              <div className="col-xl-10">
-                                <Input
-                                  className={
-                                    errors.message && touched.message
-                                      ? "error"
-                                      : ""
-                                  }
-                                  value={values.message}
-                                  name="message"
-                                  type="textarea"
-                                  onChange={handleChange}
-                                  onBlur={handleBlur}
+                              <select
+                                className="form-control"
+                                name="agency"
+                                value={values.agency}
+                                onChange={handleChange}
+                                onClick={this.hand}
+                                onBlur={handleBlur}
+                                style={{ display: "block" }}
+                              >
+                                <option value="" label="Select Type" />
+                                <option value="lametro" label="lametro" />
+                                <option
+                                  value="lametro-rail"
+                                  label="lametro-rail"
                                 />
-                                {errors.message && touched.message && (
-                                  <label className="error text-danger">
-                                    {errors.message}
-                                  </label>
-                                )}
+                              </select>
+                              {errors.agency && touched.agency && (
+                                <div className="input-feedback text-danger">
+                                  {errors.agency}
+                                </div>
+                              )}
+                            </fieldset>
+                            <fieldset className={this.state.inputHide}>
+                              <Label className="col-form-label text-primary">
+                                Route
+                              </Label>
+                              <select
+                                className="form-control"
+                                name="route"
+                                value={values.route}
+                                onChange={handleChange}
+                                onClick={this.routeClick}
+                                onBlur={handleBlur}
+                                style={{ display: "block" }}
+                              >
+                                <option value="" label="Select Type" />
+                                {this.state.selectedAgency === "lametro-rail"
+                                  ? constants.routse.lametroRail.map(
+                                      this.renderLametroRail
+                                    )
+                                  : this.state.selectedAgency === "lametro"
+                                  ? constants.routse.lametro.map(
+                                      this.renderLametroRail
+                                    )
+                                  : ""}
+                              </select>
+                              {errors.route && touched.route && (
+                                <div className="input-feedback text-danger">
+                                  {errors.route}
+                                </div>
+                              )}
+                            </fieldset>
+                            <fieldset className={this.state.inputHide}>
+                              <Label className="col-form-label text-primary">
+                                Category
+                              </Label>
+                              <select
+                                className="form-control"
+                                name="category"
+                                value={values.category}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                style={{ display: "block" }}
+                              >
+                                <option value="" label="Select Type" />
+                                <option value="Delay" label="Delay" />
+                                <option
+                                  value="Disturbance"
+                                  label="Disturbance"
+                                />
+                                <option
+                                  value="Route Closed"
+                                  label="Route Closed"
+                                />
+                              </select>
+                              {errors.category && touched.category && (
+                                <div className="input-feedback text-danger">
+                                  {errors.category}
+                                </div>
+                              )}
+                            </fieldset>
+                            <fieldset className={this.state.inputHide}>
+                              <div className="row">
+                                <Label
+                                  className="col-xl-2 col-form-label text-primary"
+                                  for="message"
+                                >
+                                  Message
+                                </Label>
+                                <div className="col-xl-10">
+                                  <Input
+                                    className={
+                                      errors.message && touched.message
+                                        ? "error"
+                                        : ""
+                                    }
+                                    value={values.message}
+                                    name="message"
+                                    type="textarea"
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                  />
+                                  {errors.message && touched.message && (
+                                    <label className="error text-danger">
+                                      {errors.message}
+                                    </label>
+                                  )}
+                                </div>
                               </div>
-                            </div>
-                          </fieldset>
-                        </div>
-                        <div className="card-footer text-center">
-                          <Button
-                            color="primary"
-                            type="button"
-                            onClick={handleSubmit}
-                            className="submitForm"
-                          >
-                            Ding!
-                          </Button>
+                            </fieldset>
+                          </div>
+                          <div className="card-footer text-center">
+                            <Button
+                              color="primary"
+                              type="button"
+                              onClick={handleSubmit}
+                              className="submitForm"
+                            >
+                              Ding!
+                            </Button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </Form>
-                </div>
-              </Row>
-            );
-          }}
-        </Formik>
-      </div>
+                    </Form>
+                  </div>
+                </Row>
+              );
+            }}
+          </Formik>
+        </div>
+      </SwipeWrapper>
     );
   }
 }
