@@ -13,10 +13,9 @@ class DingCreate extends React.Component {
       primarySponsorTypeId: 1,
       routes: [],
       categorys: [],
-      addressId: undefined,
       inputHide: "d-none",
-      addressValue: null,
-      selectedAgency: ""
+      selectedAgency: "",
+      selectedRouteName: ""
     };
     this.state.dings = this.validation.initialValues;
   }
@@ -27,10 +26,9 @@ class DingCreate extends React.Component {
       data = {
         DingCategory: values.category,
         Value: values.message,
-        CreatedBy: 1,
-        RouteId: 1,
+        RouteId: values.route,
         StopId: 1,
-        StopDisplayName: values.route,
+        StopDisplayName: this.state.selectedRouteName,
         Agency: values.agency,
         Lat: response.coords.latitude == null ? 0 : response.coords.latitude,
         Long: response.coords.longitude == null ? 0 : response.coords.latitude
@@ -53,16 +51,19 @@ class DingCreate extends React.Component {
     }
     console.log(a.target.value);
   };
+  routeClick = e => {
+    this.setState({ selectedRouteName: e.target.textContent });
+  };
   renderLametro = lametro => {
     return (
-      <option key={lametro.id} value={lametro.display_name}>
+      <option key={lametro.id} value={lametro.id}>
         {lametro.display_name}
       </option>
     );
   };
   renderLametroRail = lametroRail => {
     return (
-      <option key={lametroRail.id} value={lametroRail.display_name}>
+      <option key={lametroRail.id} value={lametroRail.id}>
         {lametroRail.display_name}
       </option>
     );
@@ -138,6 +139,7 @@ class DingCreate extends React.Component {
                               name="route"
                               value={values.route}
                               onChange={handleChange}
+                              onClick={this.routeClick}
                               onBlur={handleBlur}
                               style={{ display: "block" }}
                             >
@@ -150,9 +152,7 @@ class DingCreate extends React.Component {
                                 ? constants.routse.lametro.map(
                                     this.renderLametroRail
                                   )
-                                : ""
-                              /* {this.state.routes.map(this.renderOptions)} */
-                              }
+                                : ""}
                             </select>
                             {errors.route && touched.route && (
                               <div className="input-feedback text-danger">
