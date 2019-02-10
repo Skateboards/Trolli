@@ -61,9 +61,7 @@ class RouteMap extends React.Component {
 
   getRouteSuccess = response => {
     let route = JSON.parse(response.data.item);
-    console.log(route);
     const routeIds = [];
-    debugger;
     for (let i = 0; i < route.routes[0].legs[0].steps.length; i++) {
       const step = route.routes[0].legs[0].steps[i];
       if ("travel_mode" in step && step.travel_mode === "TRANSIT") {
