@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Sabio.Models.Responses;
 using Sabio.Models.Domain;
+using Sabio.Models.Requests;
 
 namespace Trolli.Web.Controllers.Api
 {
@@ -65,12 +66,12 @@ namespace Trolli.Web.Controllers.Api
 
 
         [Route("routes"), HttpPost]
-        public HttpResponseMessage Post(List<int> RouteId, DateTime Date)
+        public HttpResponseMessage Post(DingSelectRoute model)
         {
 
             ItemsResponse<Ding> response = new ItemsResponse<Ding>();
             {
-                response.Items = _service.Post(RouteId, Date);
+                response.Items = _service.Post(model);
             }
             return Request.CreateResponse(HttpStatusCode.OK, response);
         }

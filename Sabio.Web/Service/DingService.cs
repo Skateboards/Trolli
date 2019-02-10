@@ -82,7 +82,7 @@ namespace Trolli.Services.Dings
             });
         }
 
-        public List<Ding> Post(List<int> RouteId, DateTime Date)
+        public List<Ding> Post(DingSelectRoute model)
         {
 
             string storedProc = "dbo.Dings_SelectList";
@@ -94,14 +94,14 @@ namespace Trolli.Services.Dings
                     DingSelectRoute dingSelect = new DingSelectRoute();
                     SqlParameter p = new SqlParameter("@RouteId", System.Data.SqlDbType.Structured);
 
-                    if (dingSelect != null && dingSelect.RouteId.Any())
+                    if (model.RouteId != null && model.RouteId.Any())
                     {
-                        p.Value = new Sabio.Data.IntIdTable(dingSelect.RouteId);
+                        p.Value = new Sabio.Data.IntIdTable(model.RouteId);
                     }
 
                     sqlParams.Add(p);
 
-                    sqlParams.AddWithValue("@Date", dingSelect.Date);
+                    sqlParams.AddWithValue("@DateAdded", model.Date);
 
 
                 }
