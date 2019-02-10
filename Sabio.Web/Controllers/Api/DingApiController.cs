@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Sabio.Models.Responses;
+using Sabio.Models;
 using Sabio.Models.Domain;
 using Sabio.Models.Requests;
 
@@ -63,6 +64,20 @@ namespace Trolli.Web.Controllers.Api
             return Request.CreateResponse(HttpStatusCode.Created, responseBody);
         }
 
+        [Route("{pageIndex:int}/{pageSize:int}"), HttpGet]
+        public HttpResponseMessage Get(int pageIndex, int pageSize)
+        {
+
+            ItemResponse<Paged<Ding>> response = new ItemResponse<Paged<Ding>>();
+            response.Item = _service.Get(pageIndex, pageSize);
+            if (response.Item == null)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, response);
+        }
+
 
 
         [Route("routes"), HttpPost]
@@ -74,6 +89,18 @@ namespace Trolli.Web.Controllers.Api
                 response.Items = _service.Post(model);
             }
             return Request.CreateResponse(HttpStatusCode.OK, response);
+        }
+        [Route("list"), HttpPost]
+        public HttpResponseMessage Get(LatLongRequest model)
+        {
+            List<Ding> dingData = _service.Get(model);
+            ItemResponse<List<Ding>> resp = new ItemResponse<List<Ding>>();
+            if (dingData != null)
+            {
+                resp.Item = dingData;
+                return Request.CreateResponse(HttpStatusCode.Created, resp);
+            }
+            return Request.CreateResponse(HttpStatusCode.Created, resp);
         }
     }
 }

@@ -1,5 +1,6 @@
 import React, { Component, Suspense, lazy } from "react";
 import { Route, withRouter, Switch } from "react-router-dom";
+import Swipe from "react-easy-swipe";
 import "./App.css";
 
 import PageLoader from "./components/PageLoader";
@@ -7,10 +8,11 @@ import * as userService from "./Services/userService";
 
 const NavBar = lazy(() => import("./components/NavBar"));
 const HomePage = lazy(() => import("./components/HomePage"));
-const RouteMap = lazy(() => import("./components/RouteMap"));
+const RouteMap = lazy(() => import("./components/routemap"));
 const Login = lazy(() => import("./components/AuthFlow/Login"));
 const Register = lazy(() => import("./components/AuthFlow/Register"));
 const Logout = lazy(() => import("./components/AuthFlow/Logout"));
+const DingCreate = lazy(() => import("./components/Dings/DingCreate"));
 
 const listofAnonymousPages = [
   "/goodbye",
@@ -107,8 +109,16 @@ class App extends Component {
   onLogoutFail(err) {
     console.log(err);
   }
+
+  onSwipeMove(position, props) {
+    if (position.x > 145 && position.y < 50 && position.y > -50) {
+      props.history.goBack();
+    } else if (position.x < -145 && position.y < 50 && position.y > -50) {
+      props.history.goForward();
+    }
+  }
+
   render() {
-    console.log(this.props.location);
     let content = null;
     if (listofAnonymousPages.indexOf(this.props.location.pathname) > -1) {
       content = (
@@ -145,56 +155,75 @@ class App extends Component {
     if (this.state.userAuthorized) {
       content = (
         <Suspense fallback={<PageLoader />}>
-          <Route
-            path="/"
-            render={props => (
-              <NavBar {...props} userAuthorized={this.state.userAuthorized} />
-            )}
-          />
-          <Switch>
+          <Swipe
+            onSwipeMove={position => this.onSwipeMove(position, this.props)}
+          >
             <Route
               path="/"
-              exact
               render={props => (
-                <HomePage
-                  {...props}
-                  userAuthorized={this.state.userAuthorized}
-                />
+                <NavBar {...props} userAuthorized={this.state.userAuthorized} />
               )}
             />
-            <Route
-              path="/login"
-              exact
-              render={props => (
-                <Login {...props} userAuthorized={this.state.userAuthorized} />
-              )}
-            />
-            <Route
-              path="/logout"
-              exact
-              render={props => <Logout {...props} />}
-            />
-            <Route
-              path="/register"
-              exact
-              render={props => (
-                <Register
-                  {...props}
-                  userAuthorized={this.state.userAuthorized}
-                />
-              )}
-            />
-            <Route
-              path="/myroute"
-              exact
-              render={props => (
-                <RouteMap
-                  {...props}
-                  userAuthorized={this.state.userAuthorized}
-                />
-              )}
-            />
-          </Switch>
+            <Switch>
+              <Route
+                path="/"
+                exact
+                render={props => (
+                  <HomePage
+                    {...props}
+                    userAuthorized={this.state.userAuthorized}
+                  />
+                )}
+              />
+              <Route
+                path="/login"
+                exact
+                render={props => (
+                  <Login
+                    {...props}
+                    userAuthorized={this.state.userAuthorized}
+                  />
+                )}
+              />
+              <Route
+                path="/logout"
+                exact
+                render={props => <Logout {...props} />}
+              />
+
+              <Route
+                path="/ding/new"
+                exact
+                render={props => (
+                  <DingCreate
+                    {...props}
+                    userAuthorized={this.state.userAuthorized}
+                  />
+                )}
+              />
+
+              <Route
+                path="/register"
+                exact
+                render={props => (
+                  <Register
+                    {...props}
+                    userAuthorized={this.state.userAuthorized}
+                  />
+                )}
+              />
+              <Route
+                path="/myroute"
+                exact
+                render={props => (
+                  <RouteMap
+                    {...props}
+                    userAuthorized={this.state.userAuthorized}
+                  />
+                )}
+              />
+            </Switch>
+          </Swipe>
         </Suspense>
       );
     } else {
