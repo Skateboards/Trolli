@@ -4,30 +4,28 @@ const routeAPI = "https://maps.googleapis.com/maps/api/directions/json?";
 const geoLocationAPI =
   "https://maps.googleapis.com/maps/api/geocode/json?address=";
 
-const getRoute = (originLatLong, destinationLatLong) => {
+const getRoute = (originLatLong, destinationLatLong, onSuccess, onError) => {
+  let r = `${routeAPI}origin=${originLatLong.lat},${
+    originLatLong.lng
+  }&destination=${destinationLatLong.lat},${
+    destinationLatLong.lng
+  }&mode=transit&key=${key}`;
   const config = {
-    method: "GET",
-    url:
-      routeAPI +
-      "origin=" +
-      { originLatLong } +
-      "&" +
-      "destination" +
-      { destinationLatLong } +
-      "mode=transit&transit_mode=bus&key=" +
-      { key },
+    method: "PUT",
+    url: "http://localhost:3024/api/routes",
+    data: { Url: r },
     withCredentials: true,
     crossDomain: true,
     headers: { "Content-Type": "application/json" }
   };
 
   return axios(config)
-    .then(global.onGlobalSuccess)
-    .catch(global.onGlobalError);
+    .then(onSuccess)
+    .catch(onError);
 };
 
 const geoLocation = (mapImageURL, onSuccess, onError) => {
-  var s = `${geoLocationAPI + mapImageURL}&key=${key}`;
+  let s = `${geoLocationAPI + mapImageURL}&key=${key}`;
   const config = {
     method: "PUT",
     data: { Url: s },
@@ -44,4 +42,21 @@ const geoLocation = (mapImageURL, onSuccess, onError) => {
     .catch(onError);
 };
 
-export { getRoute, geoLocation };
+const listOfDings = (payload, onSuccess, onError) => {
+  const config = {
+    method: "POST",
+    data: payload,
+    url: "http://localhost:3024/api/trolli/routes",
+    // withCredentials: true,
+    // crossDomain: true,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  return axios(config)
+    .then(onSuccess)
+    .catch(onError);
+};
+
+export { getRoute, geoLocation, listOfDings };

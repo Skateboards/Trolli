@@ -100,5 +100,17 @@ namespace Trolli.Web.Controllers.Api
             }
             return Request.CreateResponse(HttpStatusCode.OK, response);
         }
+        [Route("list"), HttpPost]
+        public HttpResponseMessage Get(LatLongRequest model)
+        {
+            List<Ding> dingData = _service.Get(model);
+            ItemResponse<List<Ding>> resp = new ItemResponse<List<Ding>>();
+            if (dingData != null)
+            {
+                resp.Item = dingData;
+                return Request.CreateResponse(HttpStatusCode.Created, resp);
+            }
+            return Request.CreateResponse(HttpStatusCode.Created, resp);
+        }
     }
 }

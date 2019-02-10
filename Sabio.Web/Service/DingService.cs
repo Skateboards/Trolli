@@ -191,7 +191,7 @@ namespace Trolli.Services.Dings
         public List<Ding> Post(DingSelectRoute model)
         {
 
-            string storedProc = "dbo.Dings_SelectList";
+            string storedProc = "[dbo].[Dings_SelectList]";
             List<Ding> dingList = new List<Ding>();
             _dataProvider.ExecuteCmd(storedProc
                 , inputParamMapper: delegate (SqlParameterCollection sqlParams)
@@ -218,8 +218,9 @@ namespace Trolli.Services.Dings
                    ding.DingId = reader.GetSafeInt32(startingIndex++);
                    ding.DingCategory = reader.GetSafeString(startingIndex++);
                    ding.Value = reader.GetSafeString(startingIndex++);
+                   ding.DateAdded = reader.GetSafeDateTime(startingIndex++);
                    ding.CreatedBy = reader.GetSafeInt32(startingIndex++);
-                   ding.RouteId = reader.GetSafeInt32(startingIndex);
+                   ding.RouteId = reader.GetSafeInt32(startingIndex++);
                    ding.StopId = reader.GetSafeInt32(startingIndex++);
                    ding.StopDisplayName = reader.GetSafeString(startingIndex++);
                    ding.Agency = reader.GetSafeString(startingIndex++);
@@ -230,6 +231,43 @@ namespace Trolli.Services.Dings
                });
             return dingList;
         }
+
+        public List<Ding> Get(LatLongRequest model)
+        {
+            string storedProc = "[dbo].[Dings_SelectAll]";
+            List<Ding> dingData = null;
+            _dataProvider.ExecuteCmd(storedProc
+                , inputParamMapper: delegate (SqlParameterCollection sqlParams)
+                {
+                    sqlParams.AddWithValue("@Date", model.Date);
+                    sqlParams.AddWithValue("@Lat", model.Lat);
+                    sqlParams.AddWithValue("@Long", model.Long);
+                }
+                , singleRecordMapper: delegate (IDataReader reader, short set)
+                {
+                    Ding ding = new Ding();
+                    int startingIndex = 0;
+                    ding.DingId = reader.GetSafeInt32(startingIndex++);
+                    ding.DingCategory = reader.GetSafeString(startingIndex++);
+                    ding.Value = reader.GetSafeString(startingIndex++);
+                    ding.DateAdded = reader.GetSafeDateTime(startingIndex++);
+                    ding.CreatedBy = reader.GetSafeInt32(startingIndex++);
+                    ding.RouteId = reader.GetSafeInt32(startingIndex++);
+                    ding.StopId = reader.GetSafeInt32(startingIndex++);
+                    ding.StopDisplayName = reader.GetSafeString(startingIndex++);
+                    ding.Agency = reader.GetSafeString(startingIndex++);
+                    ding.Lat = reader.GetSafeDouble(startingIndex++);
+                    ding.Long = reader.GetSafeDouble(startingIndex++);
+                    ding.Miles = reader.GetSafeDouble(startingIndex++);
+                    if (dingData == null)
+                    {
+                        dingData = new List<Ding>();
+                    }
+                    dingData.Add(ding);
+                });
+            return dingData;
+        }
+
     }
 
 }
