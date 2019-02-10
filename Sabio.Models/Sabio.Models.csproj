@@ -50,6 +50,7 @@
     <Compile Include="Domain\Ding.cs" />
     <Compile Include="Domain\UserBase.cs" />
     <Compile Include="Interfaces\IUserAuthData.cs" />
+    <Compile Include="Paged.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\DigAddRequest.cs" />
     <Compile Include="Requests\DingSelectRoute.cs" />
