@@ -4,7 +4,6 @@ import "./App.css";
 
 import NavBar from "./components/NavBar";
 import HomePage from "./components/HomePage";
-import Routemap from "./components/RouteMap";
 import RouteMap from "./components/RouteMap";
 import Login from "./components/AuthFlow/Login";
 import Register from "./components/AuthFlow/Register";
