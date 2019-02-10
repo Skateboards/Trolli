@@ -4,6 +4,8 @@ import "./App.css";
 
 import NavBar from "./components/NavBar";
 import HomePage from "./components/HomePage";
+import Routemap from "./components/RouteMap";
+import RouteMap from "./components/RouteMap";
 import Login from "./components/AuthFlow/Login";
 import Register from "./components/AuthFlow/Register";
 
@@ -16,6 +18,7 @@ class App extends Component {
           <Route path="/" exact component={HomePage} />
           <Route path="/login" exact component={Login} />
           <Route path="/register" exact component={Register} />
+          <Route path="/myroute" exact component={RouteMap} />
         </Switch>
       </React.Fragment>
     );
