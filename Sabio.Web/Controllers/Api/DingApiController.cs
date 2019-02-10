@@ -7,6 +7,8 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Sabio.Models.Responses;
+using Sabio.Models.Domain;
+using Sabio.Models.Requests;
 
 namespace Trolli.Web.Controllers.Api
 {
@@ -59,6 +61,19 @@ namespace Trolli.Web.Controllers.Api
             _service.Update(data);
             SuccessResponse responseBody = new SuccessResponse();
             return Request.CreateResponse(HttpStatusCode.Created, responseBody);
+        }
+
+
+
+        [Route("routes"), HttpPost]
+        public HttpResponseMessage Post(DingSelectRoute model)
+        {
+
+            ItemsResponse<Ding> response = new ItemsResponse<Ding>();
+            {
+                response.Items = _service.Post(model);
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, response);
         }
     }
 }
