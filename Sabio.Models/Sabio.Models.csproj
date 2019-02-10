@@ -46,6 +46,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domain\TrolliUsers.cs" />
     <Compile Include="Domain\UserBase.cs" />
     <Compile Include="Interfaces\IUserAuthData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
