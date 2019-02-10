@@ -22,7 +22,9 @@ class NavBar extends React.Component {
     return (
       <div>
         <Navbar className="bg-light-blue" color="dark" dark expand="md">
-          <NavbarBrand href="/">Trolli</NavbarBrand>
+          <NavbarBrand href="/">
+            <i className="fas fa-bus mr-2" />Trolli
+          </NavbarBrand>
           <Link to="/logout" className="btn bg-light-blue border-0">
             Logout
           </Link>
