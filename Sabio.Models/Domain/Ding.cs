@@ -28,5 +28,7 @@ namespace Sabio.Models.Domain
         public double Lat { get; set; }
 
         public double Long { get; set; }
+
+        public double Miles { get; set; }
     }
 }
