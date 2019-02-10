@@ -48,6 +48,7 @@ namespace Sabio.Web.Service
             return trolliData;
 
         }
+
         public int Insert(Troll_UserAddRequest model)
         {
             int id = 0;
@@ -71,6 +72,7 @@ namespace Sabio.Web.Service
                 );
             return id;
         }
+
 
         public void Update(Troll_UserUpdateRequest data)
         {
