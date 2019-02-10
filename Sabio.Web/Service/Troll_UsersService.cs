@@ -118,6 +118,13 @@ namespace Sabio.Web.Service
             return isSuccessful;
 
         }
+
+        public void LogOut()
+        {
+            _authenticationService.LogOut();
+
+        }
+
         private UserBase SelectByUserName(string userName, string password)
         {
             string PasswordRead = "";

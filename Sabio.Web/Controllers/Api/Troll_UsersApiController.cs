@@ -13,7 +13,6 @@ using Sabio.Services;
 
 namespace Sabio.Web.Controllers
 {
-    [AllowAnonymous]
     [RoutePrefix("api/users")]
     public class Troll_UsersApiController : ApiController
     {
@@ -26,6 +25,7 @@ namespace Sabio.Web.Controllers
         }
 
         [Route, HttpPost]
+        [AllowAnonymous]
         public HttpResponseMessage Create(Troll_UserAddRequest model)
         {
             if (!ModelState.IsValid)
@@ -64,6 +64,7 @@ namespace Sabio.Web.Controllers
         }
 
         [Route("{id:int}"), HttpGet]
+        [AllowAnonymous]
         public HttpResponseMessage Get(int id)
         {
             {
@@ -104,14 +105,31 @@ namespace Sabio.Web.Controllers
 
         }
 
+        [Route("logout"), HttpGet]
+        public HttpResponseMessage LogOut()
+        {
+            HttpStatusCode statusCode = HttpStatusCode.OK;
+            _service.LogOut();
+            return Request.CreateResponse(statusCode, new Models.Responses.SuccessResponse());
+        }
+
         [Route("current"), HttpGet]
         public HttpResponseMessage Current()
         {
             ItemResponse<IUserAuthData> response = new ItemResponse<IUserAuthData>();
-
+            HttpStatusCode statusCode = HttpStatusCode.OK;
             response.Item = _auth.GetCurrentUser();
 
-            return Request.CreateResponse(HttpStatusCode.OK, response);
+            if (response.Item != null)
+            {
+                return Request.CreateResponse(statusCode, response);
+            }
+            else
+            {
+                response.IsSuccessful = false;
+                statusCode = HttpStatusCode.BadRequest;
+                return Request.CreateResponse(statusCode, response);
+            }
         }
     }
 }

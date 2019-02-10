@@ -4,7 +4,7 @@ import { Formik } from "formik";
 import { Form, FormGroup, Input, Container, Card } from "reactstrap";
 import { Link } from "react-router-dom";
 
-// import * as accountsService from "../../services/accountsService";
+import * as userService from "../../Services/userService";
 import * as schemas from "../../models/userSchemas";
 // import * as prompts from "../NotificationMessage";
 
@@ -18,39 +18,38 @@ class Login extends PureComponent {
     // this.onLoginSuccess = this.onLoginSuccess.bind(this);
   }
 
-  //   componentDidMount() {
-  //     if (this.props.userAuthorized) {
-  //       this.props.history.goBack();
-  //     }
-  //   }
+  componentDidMount() {
+    if (this.props.userAuthorized) {
+      this.props.history.goBack();
+    }
+  }
 
-  //   onLoginSuccess = sub => {
-  //     sub(false);
-  //     prompts.success({ message: "Welcome Back!" });
-  //     if (this.props.location.search) {
-  //       let path = this.props.location.search.replace("?return=", "");
-  //       this.props.history.push(path, {
-  //         action: "USERLOGIN"
-  //       });
-  //     } else {
-  //       this.props.history.push("/", {
-  //         action: "USERLOGIN"
-  //       });
-  //     }
-  //   };
+  onLoginSuccess = (resp, sub) => {
+    sub(false);
+    console.log(resp);
+    if (this.props.location.search) {
+      let path = this.props.location.search.replace("?return=", "");
+      this.props.history.push(path, {
+        action: "USERLOGIN"
+      });
+    } else {
+      this.props.history.push("/", {
+        action: "USERLOGIN"
+      });
+    }
+  };
 
-  //   onLoginFail = (err, sub) => {
-  //     sub(false);
-  //     prompts.error({ message: "Oops! Something went wrong." });
-  //     console.log(err);
-  //   };
+  onLoginFail = (err, sub) => {
+    sub(false);
+    console.log(err);
+  };
 
-  //   handleSubmit = (values, { setSubmitting }) => {
-  //     accountsService
-  //       .login(values)
-  //       .then(() => this.onLoginSuccess(setSubmitting))
-  //       .catch(err => this.onLoginFail(err, setSubmitting));
-  //   };
+  handleSubmit = (values, { setSubmitting }) => {
+    userService
+      .login(values)
+      .then(resp => this.onLoginSuccess(resp, setSubmitting))
+      .catch(err => this.onLoginFail(err, setSubmitting));
+  };
 
   render() {
     return (

@@ -1,14 +1,14 @@
 import qs from "qs";
 import Jquery from "jquery";
-import axios from "axios";
-axios.defaults.withCredentials = true;
-// Add a request interceptor
-axios.interceptors.request.use(function(config) {
-  console.log("withCredentials");
-  config.withCredentials = true;
-  return config;
-});
-// withCredentials: true,
+// import axios from "axios";
+// axios.defaults.withCredentials = true;
+// // Add a request interceptor
+// axios.interceptors.request.use(function(config) {
+//   console.log("withCredentials");
+//   config.withCredentials = true;
+//   return config;
+// });
+// // withCredentials: true,
 
 /**
  * Will unpack the response body from reponse object
