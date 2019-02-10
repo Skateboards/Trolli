@@ -1,12 +1,13 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
+import SwipeWrapper from "./SwipeWrapper";
 import {
   Navbar,
+  Nav,
+  Collapse,
+  NavbarToggler,
   NavbarBrand,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem
+  NavItem
 } from "reactstrap";
 
 class NavBar extends React.Component {
@@ -25,38 +26,47 @@ class NavBar extends React.Component {
     });
   };
 
+  goHome = e => {
+    e.preventDefault();
+    this.props.history.push("/");
+  };
+
   render() {
     return (
-      <div>
+      <SwipeWrapper {...this.props}>
         <Navbar className="bg-light-blue" color="dark" dark expand="md">
-          <NavbarBrand href="/">
+          <NavbarBrand href="/" onClick={this.goHome}>
             <i className="fas fa-bus mr-2" />
             Trolli
           </NavbarBrand>
-          {!this.props.userAuth && (
-            <UncontrolledDropdown nav inNavbar>
-              <DropdownToggle nav caret>
-                {this.props.currentUser && this.props.currentUser.name}
-              </DropdownToggle>
-              <DropdownMenu right>
-                <DropdownItem>
-                  <Link to="/myroute">My Route</Link>
-                </DropdownItem>
-                <DropdownItem>
-                  <Link to="/mydings">My Dings</Link>
-                </DropdownItem>
-                <DropdownItem>
-                  <Link to="/ding/new">New Ding</Link>
-                </DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem>
-                  <Link to="/logout">Logout</Link>
-                </DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown>
-          )}
+
+          <NavbarToggler className="border-0" onClick={this.toggle} />
+          <Collapse isOpen={this.state.isOpen} className="mb-4" navbar>
+            <Nav className="ml-auto text-center" navbar>
+              <NavItem>
+                <Link to="/myroute" className="nav-link">
+                  <strong style={{ color: "white" }}>My Route</strong>
+                </Link>
+              </NavItem>
+              <NavItem>
+                <Link to="/mydings" className="nav-link">
+                  <strong style={{ color: "white" }}>My Dings</strong>
+                </Link>
+              </NavItem>
+              <NavItem>
+                <Link to="/ding/new" className="nav-link">
+                  <strong style={{ color: "white" }}>New Ding</strong>
+                </Link>
+              </NavItem>
+              <NavItem>
+                <Link to="/logout" className="nav-link">
+                  <strong style={{ color: "white" }}>Logout</strong>
+                </Link>
+              </NavItem>
+            </Nav>
+          </Collapse>
         </Navbar>
-      </div>
+      </SwipeWrapper>
     );
   }
 }

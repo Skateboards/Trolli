@@ -43,10 +43,10 @@ const getPageNearby = qStr => {
     .catch(global.onGlobalError);
 };
 
-const getMine = () => {
+const getPageMine = qStr => {
   const config = {
     method: "GET",
-    url: "/api/mydings",
+    url: "/api/trolli/mydings?" + qs.stringify(qStr),
     headers: { "Content-Type": "application/json" }
   };
 
@@ -55,4 +55,4 @@ const getMine = () => {
     .catch(global.onGlobalError);
 };
 
-export { getPageNearby, getMine, create, getRoutes };
+export { getPageNearby, create, getRoutes, getPageMine };
