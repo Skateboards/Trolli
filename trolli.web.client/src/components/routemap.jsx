@@ -109,6 +109,7 @@ class RouteMap extends React.Component {
               type="text"
               value={this.state.inputDestination}
               onChange={event => this.handleChange(event)}
+              placeholder="Enter your destination address..."
               name="inputDestination"
               className="form-control"
             />
