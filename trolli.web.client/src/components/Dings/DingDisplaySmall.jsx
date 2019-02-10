@@ -6,11 +6,14 @@ export default class DingDisplaySmall extends PureComponent {
     return (
       <div key={this.props.dingData}>
         <Card className=" m-3 text-center">
-          <CardHeader className="d-flex" style={{ backgroundColor: "#007bff" }}>
-            <i className="fas fa-train ml-auto mr-2" />
+          <CardHeader className="d-flex" style={{ backgroundColor: "#17a2b8" }}>
+            <i className="fas fa-route ml-auto mr-2 pt-1" />
             <span>58</span>
           </CardHeader>
-          <CardBody className="p-5" style={{ backgroundColor: "#6c757d" }}>
+          <CardBody
+            className="p-5"
+            style={{ backgroundColor: "#f8f9fa", color: "black" }}
+          >
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua.
           </CardBody>

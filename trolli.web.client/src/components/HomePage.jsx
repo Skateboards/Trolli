@@ -14,10 +14,10 @@ export default class HomePage extends PureComponent {
       <div className="bg-light-blue">
         <Jumbotron fluid className="text-center mb-0 bg-light-blue">
           <Container fluid>
-            <Button color="primary" className="btn-block">
+            <Button color="info" className="btn-block">
               Suggested Routes
             </Button>
-            <Button color="secondary" className="btn-block">
+            <Button color="light" className="btn-block">
               New Ding
             </Button>
           </Container>
@@ -25,7 +25,7 @@ export default class HomePage extends PureComponent {
         <div
           className="text-center p-3"
           style={{
-            backgroundColor: "white",
+            backgroundColor: "#f8f9fa",
             color: "black",
             margin: "0 20px",
             borderRadius: "50px"

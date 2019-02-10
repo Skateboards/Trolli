@@ -4,7 +4,8 @@ import "./App.css";
 
 import NavBar from "./components/NavBar";
 import HomePage from "./components/HomePage";
-import Login from "./components/Login";
+import Login from "./components/AuthFlow/Login";
+import Register from "./components/AuthFlow/Register";
 
 class App extends Component {
   render() {
@@ -14,6 +15,7 @@ class App extends Component {
         <Switch>
           <Route path="/" exact component={HomePage} />
           <Route path="/login" exact component={Login} />
+          <Route path="/register" exact component={Register} />
         </Switch>
       </React.Fragment>
     );
