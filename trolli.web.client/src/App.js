@@ -1,17 +1,23 @@
 import React, { Component } from "react";
-import { Route, BrowserRouter as Router } from "react-router-dom";
+import { Route, withRouter, Switch } from "react-router-dom";
 import "./App.css";
 
+import NavBar from "./components/NavBar";
 import HomePage from "./components/HomePage";
+import Login from "./components/Login";
 
 class App extends Component {
   render() {
     return (
-      <Router>
-        <Route path="/" exact component={HomePage} />
-      </Router>
+      <React.Fragment>
+        <Route path="/" component={NavBar} />
+        <Switch>
+          <Route path="/" exact component={HomePage} />
+          <Route path="/login" exact component={Login} />
+        </Switch>
+      </React.Fragment>
     );
   }
 }
 
-export default App;
+export default withRouter(App);
