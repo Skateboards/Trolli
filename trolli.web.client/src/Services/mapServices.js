@@ -42,4 +42,21 @@ const geoLocation = (mapImageURL, onSuccess, onError) => {
     .catch(onError);
 };
 
-export { getRoute, geoLocation };
+const listOfDings = (payload, onSuccess, onError) => {
+  const config = {
+    method: "POST",
+    data: payload,
+    url: "http://localhost:3024/api/trolli/routes",
+    // withCredentials: true,
+    // crossDomain: true,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  return axios(config)
+    .then(onSuccess)
+    .catch(onError);
+};
+
+export { getRoute, geoLocation, listOfDings };
