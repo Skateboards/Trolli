@@ -21,8 +21,6 @@ class Login extends PureComponent {
     this.validation = schemas.getRegisterSchema;
     this.state = {};
     this.state.userData = this.validation.initialValues;
-
-    this.onLoginSuccess = this.onLoginSuccess.bind(this);
   }
 
   componentDidMount() {
@@ -31,8 +29,9 @@ class Login extends PureComponent {
     }
   }
 
-  onLoginSuccess = sub => {
+  onLoginSuccess = (resp, sub) => {
     sub(false);
+    console.log(resp);
     if (this.props.location.search) {
       let path = this.props.location.search.replace("?return=", "");
       this.props.history.push(path, {
@@ -50,11 +49,24 @@ class Login extends PureComponent {
     console.log(err);
   };
 
-  handleSubmit = (values, { setSubmitting }) => {
+  onCreateUserSuccess = (values, setSubmitting) => {
+    setSubmitting(false);
     userService
       .login(values)
-      .then(() => this.onLoginSuccess(setSubmitting))
+      .then(resp => this.onLoginSuccess(resp, setSubmitting))
       .catch(err => this.onLoginFail(err, setSubmitting));
+  };
+
+  onCreateUserFail = (err, sub) => {
+    sub(false);
+    console.log(err);
+  };
+
+  handleSubmit = (values, { setSubmitting }) => {
+    userService
+      .create(values)
+      .then(() => this.onCreateUserSuccess(values, setSubmitting))
+      .catch(err => this.onCreateUserFail(err, setSubmitting));
   };
 
   render() {
