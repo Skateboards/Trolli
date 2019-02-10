@@ -4,12 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sabio.Models.Domain
+namespace Sabio.Models.Requests
 {
-    public class UserBase : IUserAuthData
+    public class Troll_UserUpdateRequest
     {
+
         public int Id { get; set; }
-        public string Name { get; set; }
-        public IEnumerable<string> Roles { get; set; }
+
+
+        public string Password { get; set; }
+
+
+        public string UserName { get; set; }
     }
 }

@@ -46,6 +46,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domain\TrolliUsers.cs" />
     <Compile Include="Domain\Ding.cs" />
     <Compile Include="Domain\UserBase.cs" />
     <Compile Include="Interfaces\IUserAuthData.cs" />
@@ -53,6 +54,9 @@
     <Compile Include="Requests\DigAddRequest.cs" />
     <Compile Include="Requests\DingSelectRoute.cs" />
     <Compile Include="Requests\DingUpdateRequest.cs" />
+    <Compile Include="Requests\Troll_UserAddRequest.cs" />
+    <Compile Include="Requests\Troll_UserLoginRequest.cs" />
+    <Compile Include="Requests\Troll_UserUpdateRequest.cs" />
     <Compile Include="Responses\BaseResponse.cs" />
     <Compile Include="Responses\ErrorResponse.cs" />
     <Compile Include="Responses\ItemResponse.cs" />
